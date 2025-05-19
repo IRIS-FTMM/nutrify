@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Cam | Smart Food Calorie Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-camera"></i>
+                    <span>Calorie Cam</span>
+                </div>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="calculate-calorie">Calorie Needs</a>
+                    <a href="information">Food Information</a>
+                    <a href="about">About</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="hero">
+            <h1>Discover Your Food's Nutritional Secrets</h1>
+            <p>Simply scan your meal with your camera or upload an image to get instant calorie and nutrition information</p>
+        </section>
+
+        <section class="scan-section">
+            <div class="scan-options">
+                <div class="scan-option">
+                    <div class="option-card active" id="camera-option">
+                        <i class="fas fa-camera"></i>
+                        <h3>Scan with Camera</h3>
+                        <p>Real-time food detection using your device's camera</p>
+                    </div>
+                </div>
+                <div class="scan-option">
+                    <div class="option-card" id="upload-option">
+                        <i class="fas fa-upload"></i>
+                        <h3>Upload Image</h3>
+                        <p>Upload a photo from your device</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="camera-container active" id="camera-container">
+                <video id="camera-feed" autoplay playsinline></video>
+                <div class="camera-overlay">
+                    <div class="overlay-circle"></div>
+                </div>
+            </div>
+            
+            <div class="upload-container" id="upload-container">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload Food Image</h3>
+                <p>Drag & drop your image here or click to browse</p>
+                <input type="file" id="file-input" accept="image/*">
+                <button class="btn btn-outline" id="upload-btn">
+                    <i class="fas fa-folder-open"></i> Choose File
+                </button>
+            </div>
+            
+            <div class="camera-controls" id="camera-controls">
+                <button class="btn btn-primary" id="capture-btn">
+                    <i class="fas fa-camera"></i> Capture
+                </button>
+                <button class="btn btn-outline" id="switch-camera">
+                    <i class="fas fa-sync-alt"></i> Switch Camera
+                </button>
+            </div>
+        </section>
+        
+        <section class="results-section" id="results-section">
+            <div class="results-header">
+                <h2>Nutrition Analysis</h2>
+                <button class="btn btn-outline" id="new-scan-btn">
+                    <i class="fas fa-redo"></i> New Scan
+                </button>
+            </div>
+            
+            <div class="food-display">
+                <div class="food-image">
+                    <img src="https://via.placeholder.com/400x400" alt="Scanned food" id="result-image">
+                </div>
+                <div class="food-info">
+                    <h3 class="food-name" id="food-name">Grilled Chicken Salad</h3>
+                    <p class="food-description" id="food-description">Fresh salad with grilled chicken breast, mixed greens, cherry tomatoes, cucumbers, and balsamic vinaigrette.</p>
+                    
+                    <div class="nutrition-facts">
+                        <div class="nutrition-header">
+                            <span class="nutrition-title">Nutrition Facts</span>
+                            <span class="nutrition-serving">Per serving (approx. 350g)</span>
+                        </div>
+                        
+                        <table class="nutrition-table">
+                            <tr>
+                                <td>Calories</td>
+                                <td class="calorie-highlight" id="calories">420 kcal</td>
+                            </tr>
+                            <tr>
+                                <td>Protein</td>
+                                <td id="protein">35g</td>
+                            </tr>
+                            <tr>
+                                <td>Carbohydrates</td>
+                                <td id="carbs">20g</td>
+                            </tr>
+                            <tr>
+                                <td>Fats</td>
+                                <td id="fats">22g</td>
+                            </tr>
+                            <tr>
+                                <td>Fiber</td>
+                                <td id="fiber">5g</td>
+                            </tr>
+                            <tr>
+                                <td>Sugar</td>
+                                <td id="sugar">8g</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tips-section">
+                <h3>Healthy Eating Tips</h3>
+                <ul class="tips-list">
+                    <li>
+                        <i class="fas fa-leaf"></i>
+                        <span>This meal provides a good balance of protein and vegetables. Consider adding more leafy greens for extra fiber.</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-seedling"></i>
+                        <span>For a lower calorie option, you could use a lighter dressing or reduce the portion size by 20%.</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-apple-alt"></i>
+                        <span>Pair this with a piece of fruit for a more complete meal with additional vitamins.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-camera"></i>
+                    <span>Calorie Cam</span>
+                </div>
+                <p class="copyright">© 2025 Calorie Cam. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // DOM Elements
+        const cameraOption = document.getElementById('camera-option');
+        const uploadOption = document.getElementById('upload-option');
+        const cameraContainer = document.getElementById('camera-container');
+        const uploadContainer = document.getElementById('upload-container');
+        const cameraControls = document.getElementById('camera-controls');
+        const resultsSection = document.getElementById('results-section');
+        const fileInput = document.getElementById('file-input');
+        const uploadBtn = document.getElementById('upload-btn');
+        const captureBtn = document.getElementById('capture-btn');
+        const switchCameraBtn = document.getElementById('switch-camera');
+        const newScanBtn = document.getElementById('new-scan-btn');
+        const cameraFeed = document.getElementById('camera-feed');
+        const resultImage = document.getElementById('result-image');
+        
+        // Toggle between camera and upload options
+        cameraOption.addEventListener('click', () => {
+            cameraOption.classList.add('active');
+            uploadOption.classList.remove('active');
+            cameraContainer.classList.add('active');
+            uploadContainer.classList.remove('active');
+            cameraControls.style.display = 'flex';
+            resultsSection.classList.remove('active');
+        });
+        
+        uploadOption.addEventListener('click', () => {
+            uploadOption.classList.add('active');
+            cameraOption.classList.remove('active');
+            uploadContainer.classList.add('active');
+            cameraContainer.classList.remove('active');
+            cameraControls.style.display = 'none';
+            resultsSection.classList.remove('active');
+        });
+        
+        // Handle file upload
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+        
+                reader.onload = (event) => {
+                    resultImage.src = event.target.result;
+                    analyzeFood();  // panggil API setelah image siap
+                };
+        
+                reader.readAsDataURL(file);
+            }
+        });        
+        
+        // Handle drag and drop for upload
+        uploadContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadContainer.style.borderColor = 'var(--primary)';
+        });
+        
+        uploadContainer.addEventListener('dragleave', () => {
+            uploadContainer.style.borderColor = 'var(--gray)';
+        });
+        
+        uploadContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadContainer.style.borderColor = 'var(--gray)';
+            
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            }
+        });
+        
+        // Initialize camera
+        let stream = null;
+        let facingMode = 'environment'; // default to rear camera
+        
+        function initCamera() {
+            navigator.mediaDevices.getUserMedia({
+                video: { 
+                    facingMode: facingMode,
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                },
+                audio: false
+            }).then(function(s) {
+                stream = s;
+                cameraFeed.srcObject = stream;
+            }).catch(function(err) {
+                console.error("Camera error: ", err);
+                alert("Could not access the camera. Please make sure you have granted camera permissions.");
+            });
+        }
+        
+        // Switch between front and back camera
+        switchCameraBtn.addEventListener('click', () => {
+            facingMode = facingMode === 'user' ? 'environment' : 'user';
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            initCamera();
+        });
+        
+        // Capture image from camera
+        captureBtn.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraFeed.videoWidth;
+            canvas.height = cameraFeed.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+
+            // Konversi canvas ke blob
+            canvas.toBlob(function(blob) {
+                capturedBlob = blob;
+                resultImage.src = canvas.toDataURL('image/jpeg');
+                analyzeFood(); // Panggil analisis setelah capture
+            }, 'image/jpeg');
+        });
+
+        // Ubah analyzeFood agar bisa pakai hasil capture kamera atau upload
+        async function analyzeFood() {
+            let file = null;
+            let formData = new FormData();
+
+            // Jika ada hasil capture kamera, gunakan itu
+            if (capturedBlob) {
+                file = new File([capturedBlob], "capture.jpg", { type: "image/jpeg" });
+                formData.append("file", file);
+            }
+            // Jika tidak ada, cek file upload
+            else if (fileInput.files.length > 0) {
+                file = fileInput.files[0];
+                formData.append("file", file);
+            } else {
+                alert("Silakan upload gambar atau capture dari kamera terlebih dahulu.");
+                return;
+            }
+
+            // Tampilkan loading
+            document.getElementById('food-name').textContent = "Analyzing...";
+            document.getElementById('food-description').textContent = "Please wait while we analyze your food.";
+
+            try {
+                const response = await fetch("http://localhost:8000/detect-food/", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error("Detection API error");
+
+                const data = await response.json();
+
+                if (data.detections.length === 0) {
+                    document.getElementById('food-name').textContent = "No food detected";
+                    document.getElementById('food-description').textContent = "";
+                    return;
+                }
+
+                // Ambil label deteksi dengan confidence tertinggi
+                const bestDetection = data.detections.reduce((prev, current) => (prev.confidence > current.confidence) ? prev : current);
+
+                // Update UI sesuai label
+                document.getElementById('food-name').textContent = bestDetection.label;
+                document.getElementById('food-description').textContent = `Confidence: ${(bestDetection.confidence*100).toFixed(2)}%`;
+
+                // TODO: Panggil API kalori/nutrisi berdasarkan bestDetection.label, lalu update nilai nutrisi
+
+                // Tampilkan hasil
+                document.getElementById('results-section').classList.add('active');
+                document.getElementById('camera-container').classList.remove('active');
+                document.getElementById('upload-container').classList.remove('active');
+
+                // Reset capturedBlob setelah selesai
+                capturedBlob = null;
+
+            } catch (error) {
+                alert("Error analyzing food: " + error.message);
+            }
+        }      
+        // Calorie Calculator Functionality
+        document.getElementById('calorie-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const gender = document.getElementById('gender').value;
+            const age = parseInt(document.getElementById('age').value);
+            const height = parseInt(document.getElementById('height').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+            const goal = document.getElementById('goal').value;
+            
+            // Calculate BMR (Basal Metabolic Rate)
+            let bmr;
+            if (gender === 'male') {
+                bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            } else {
+                bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            }
+            
+            // Calculate TDEE (Total Daily Energy Expenditure)
+            const tdee = bmr * activity;
+            
+            // Calculate goal calories
+            let goalCalories;
+            let goalTitle = '';
+            let goalDesc = '';
+            
+            switch(goal) {
+                case 'lose':
+                    goalCalories = tdee - 500;
+                    goalTitle = 'Weight Loss';
+                    goalDesc = 'Calories/day for mild weight loss (500 cal deficit)';
+                    break;
+                case 'gain':
+                    goalCalories = tdee + 500;
+                    goalTitle = 'Weight Gain';
+                    goalDesc = 'Calories/day for mild weight gain (500 cal surplus)';
+                    break;
+                default:
+                    goalCalories = tdee;
+                    goalTitle = 'Maintenance';
+                    goalDesc = 'Calories/day to maintain weight';
+            }
+            
+            // Display results
+            document.getElementById('maintenance-calories').textContent = Math.round(tdee);
+            document.getElementById('goal-calories').textContent = Math.round(goalCalories);
+            document.getElementById('goal-title').textContent = goalTitle;
+            document.getElementById('goal-description').textContent = goalDesc;
+            
+            // Show results
+            document.getElementById('calorie-results').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('calorie-results').scrollIntoView({ behavior: 'smooth' });
+        });
+
+    </script>
+</body>
+</html>

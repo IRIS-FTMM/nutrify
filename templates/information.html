@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Information | Calorie Cam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+    <!-- Rest of your HTML remains exactly the same -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-camera"></i>
+                    <span>Calorie Cam</span>
+                </div>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="calculate-calorie">Calorie Needs</a>
+                    <a href="information">Food Information</a>
+                    <a href="about">About</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1>Food Information</h1>
+            <p class="subtitle">Comprehensive nutritional database of common foods and beverages</p>
+            
+            <div class="category-tabs">
+                <div class="category-tab active" data-category="food">Food Items</div>
+                <div class="category-tab" data-category="beverage">Beverages</div>
+            </div>
+            
+            <!-- Food Items Category -->
+            <div class="category-content active" id="food-category">
+                <ul class="food-list">
+                    <!-- Food Item 1 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Greek Salad</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">320 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">25g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">15g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">20g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">320 kcal</span>
+                    </li>
+                    
+                    <!-- Food Item 2 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Margherita Pizza</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">850 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">35g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">100g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">30g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">850 kcal</span>
+                    </li>
+                    
+                    <!-- Food Item 3 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Buddha Bowl</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">450 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">20g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">60g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">15g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">450 kcal</span>
+                    </li>
+                    
+                    <!-- Food Item 4 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Spaghetti Bolognese</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">620 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">30g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">80g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">20g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">620 kcal</span>
+                    </li>
+                    
+                    <!-- Food Item 5 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Cheeseburger</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">550 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">30g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">40g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">30g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">550 kcal</span>
+                    </li>
+                    
+                    <!-- Food Item 6 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Salmon Sushi Roll</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">350 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">20g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">50g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">5g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">350 kcal</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Beverages Category -->
+            <div class="category-content" id="beverage-category">
+                <ul class="food-list">
+                    <!-- Beverage Item 1 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Black Coffee</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">5 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">0g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">0g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">0g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">5 kcal</span>
+                    </li>
+                    
+                    <!-- Beverage Item 2 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Berry Smoothie</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">250 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">5g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">50g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">2g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">250 kcal</span>
+                    </li>
+                    
+                    <!-- Beverage Item 3 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Green Tea</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">0 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">0g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">0g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">0g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">0 kcal</span>
+                    </li>
+                    
+                    <!-- Beverage Item 4 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Orange Juice</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">110 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">2g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">25g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">0g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">110 kcal</span>
+                    </li>
+                    
+                    <!-- Beverage Item 5 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Chocolate Milkshake</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">450 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">10g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">70g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">15g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">450 kcal</span>
+                    </li>
+                    
+                    <!-- Beverage Item 6 -->
+                    <li class="food-item">
+                        <div>
+                            <div class="food-name">Cola</div>
+                            <span class="show-nutrition">Show nutrition details</span>
+                            <div class="nutrition-details">
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Calories:</span>
+                                    <span class="nutrition-value">140 kcal</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Protein:</span>
+                                    <span class="nutrition-value">0g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Carbs:</span>
+                                    <span class="nutrition-value">39g</span>
+                                </div>
+                                <div class="nutrition-row">
+                                    <span class="nutrition-label">Fat:</span>
+                                    <span class="nutrition-value">0g</span>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="food-calories">140 kcal</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-camera"></i>
+                    <span>Calorie Cam</span>
+                </div>
+                <p class="copyright">© 2025 Calorie Cam. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Category switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all category contents
+                    document.querySelectorAll('.category-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show selected category content
+                    const categoryId = this.getAttribute('data-category');
+                    document.getElementById(`${categoryId}-category`).classList.add('active');
+                });
+            });
+            
+            // Nutrition details toggle
+            const nutritionToggles = document.querySelectorAll('.show-nutrition');
+            nutritionToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const details = this.nextElementSibling;
+                    if (details.style.display === 'block') {
+                        details.style.display = 'none';
+                        this.textContent = 'Show nutrition details';
+                    } else {
+                        details.style.display = 'block';
+                        this.textContent = 'Hide nutrition details';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
