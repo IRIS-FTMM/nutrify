@@ -47,7 +47,7 @@ async def calculate_calorie(request: Request):
 
 @app.post("/detect-food/")
 async def detect_food(file: UploadFile = File(...)):
-    upload_folder = os.path.join(BASE_DIR, "..", "temp_uploads")
+    upload_folder = os.path.join(BASE_DIR, "..", "temp")
     os.makedirs(upload_folder, exist_ok=True)
     
     file_path = os.path.join(upload_folder, file.filename)

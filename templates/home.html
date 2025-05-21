@@ -159,8 +159,8 @@
             </div>
         </div>
     </footer>
-    
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
         // DOM Elements
         const cameraOption = document.getElementById('camera-option');
         const uploadOption = document.getElementById('upload-option');
@@ -175,7 +175,10 @@
         const newScanBtn = document.getElementById('new-scan-btn');
         const cameraFeed = document.getElementById('camera-feed');
         const resultImage = document.getElementById('result-image');
-        
+        let capturedBlob = null;
+        let stream = null;
+        let facingMode = 'environment'; // default to rear camera
+
         // Toggle between camera and upload options
         cameraOption.addEventListener('click', () => {
             cameraOption.classList.add('active');
@@ -184,8 +187,9 @@
             uploadContainer.classList.remove('active');
             cameraControls.style.display = 'flex';
             resultsSection.classList.remove('active');
+            if (!stream) initCamera();
         });
-        
+
         uploadOption.addEventListener('click', () => {
             uploadOption.classList.add('active');
             cameraOption.classList.remove('active');
@@ -193,52 +197,54 @@
             cameraContainer.classList.remove('active');
             cameraControls.style.display = 'none';
             resultsSection.classList.remove('active');
+            // Stop camera stream jika sebelumnya aktif
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
         });
-        
+
         // Handle file upload
         uploadBtn.addEventListener('click', () => {
             fileInput.click();
         });
-        
+
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
+                capturedBlob = null; // Reset capturedBlob agar tidak ambigu antara upload dan kamera
                 const file = e.target.files[0];
                 const reader = new FileReader();
-        
+
                 reader.onload = (event) => {
                     resultImage.src = event.target.result;
                     analyzeFood();  // panggil API setelah image siap
                 };
-        
+
                 reader.readAsDataURL(file);
             }
-        });        
-        
+        });
+
         // Handle drag and drop for upload
         uploadContainer.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadContainer.style.borderColor = 'var(--primary)';
         });
-        
+
         uploadContainer.addEventListener('dragleave', () => {
             uploadContainer.style.borderColor = 'var(--gray)';
         });
-        
+
         uploadContainer.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadContainer.style.borderColor = 'var(--gray)';
-            
             if (e.dataTransfer.files.length > 0) {
                 fileInput.files = e.dataTransfer.files;
                 const event = new Event('change');
                 fileInput.dispatchEvent(event);
             }
         });
-        
+
         // Initialize camera
-        let stream = null;
-        let facingMode = 'environment'; // default to rear camera
-        
         function initCamera() {
             navigator.mediaDevices.getUserMedia({
                 video: { 
@@ -255,16 +261,17 @@
                 alert("Could not access the camera. Please make sure you have granted camera permissions.");
             });
         }
-        
+
         // Switch between front and back camera
         switchCameraBtn.addEventListener('click', () => {
             facingMode = facingMode === 'user' ? 'environment' : 'user';
             if (stream) {
                 stream.getTracks().forEach(track => track.stop());
+                stream = null;
             }
             initCamera();
         });
-        
+
         // Capture image from camera
         captureBtn.addEventListener('click', () => {
             const canvas = document.createElement('canvas');
@@ -281,7 +288,7 @@
             }, 'image/jpeg');
         });
 
-        // Ubah analyzeFood agar bisa pakai hasil capture kamera atau upload
+        // Analisis makanan (kamera atau upload)
         async function analyzeFood() {
             let file = null;
             let formData = new FormData();
@@ -290,9 +297,7 @@
             if (capturedBlob) {
                 file = new File([capturedBlob], "capture.jpg", { type: "image/jpeg" });
                 formData.append("file", file);
-            }
-            // Jika tidak ada, cek file upload
-            else if (fileInput.files.length > 0) {
+            } else if (fileInput.files.length > 0) {
                 file = fileInput.files[0];
                 formData.append("file", file);
             } else {
@@ -314,9 +319,19 @@
 
                 const data = await response.json();
 
-                if (data.detections.length === 0) {
-                    document.getElementById('food-name').textContent = "No food detected";
+                if (!data.detections || data.detections.length === 0) {
+                    // Tampilkan pop up/alert animasi
+                    alert("Gambar tidak terdeteksi sebagai makanan/minuman.\nModel tidak dapat mendeteksi gambar tersebut.");
+                    // Reset tampilan hasil
+                    document.getElementById('food-name').textContent = "";
                     document.getElementById('food-description').textContent = "";
+                    document.getElementById('calories').textContent = "-";
+                    document.getElementById('protein').textContent = "-";
+                    document.getElementById('carbs').textContent = "-";
+                    document.getElementById('fats').textContent = "-";
+                    document.getElementById('fiber').textContent = "-";
+                    document.getElementById('sugar').textContent = "-";
+                    resultImage.src = "https://via.placeholder.com/400x400";
                     return;
                 }
 
@@ -330,9 +345,9 @@
                 // TODO: Panggil API kalori/nutrisi berdasarkan bestDetection.label, lalu update nilai nutrisi
 
                 // Tampilkan hasil
-                document.getElementById('results-section').classList.add('active');
-                document.getElementById('camera-container').classList.remove('active');
-                document.getElementById('upload-container').classList.remove('active');
+                resultsSection.classList.add('active');
+                cameraContainer.classList.remove('active');
+                uploadContainer.classList.remove('active');
 
                 // Reset capturedBlob setelah selesai
                 capturedBlob = null;
@@ -340,65 +355,43 @@
             } catch (error) {
                 alert("Error analyzing food: " + error.message);
             }
-        }      
+        }
+
+        // Fungsi tombol New Scan
+        newScanBtn.addEventListener('click', function() {
+            // Sembunyikan hasil deteksi
+            resultsSection.classList.remove('active');
+            // Nonaktifkan semua pilihan
+            cameraOption.classList.remove('active');
+            uploadOption.classList.remove('active');
+            cameraContainer.classList.remove('active');
+            uploadContainer.classList.remove('active');
+            cameraControls.style.display = 'none';
+            // Reset gambar hasil dan info makanan
+            resultImage.src = "https://via.placeholder.com/400x400";
+            document.getElementById('food-name').textContent = "";
+            document.getElementById('food-description').textContent = "";
+            document.getElementById('calories').textContent = "-";
+            document.getElementById('protein').textContent = "-";
+            document.getElementById('carbs').textContent = "-";
+            document.getElementById('fats').textContent = "-";
+            document.getElementById('fiber').textContent = "-";
+            document.getElementById('sugar').textContent = "-";
+            // Reset blob/file hasil capture/upload
+            capturedBlob = null;
+            if (fileInput) fileInput.value = "";
+            // Stop kamera jika aktif
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+        });
+
         // Calorie Calculator Functionality
         document.getElementById('calorie-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Get form values
-            const gender = document.getElementById('gender').value;
-            const age = parseInt(document.getElementById('age').value);
-            const height = parseInt(document.getElementById('height').value);
-            const weight = parseInt(document.getElementById('weight').value);
-            const activity = parseFloat(document.getElementById('activity').value);
-            const goal = document.getElementById('goal').value;
-            
-            // Calculate BMR (Basal Metabolic Rate)
-            let bmr;
-            if (gender === 'male') {
-                bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
-            } else {
-                bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
-            }
-            
-            // Calculate TDEE (Total Daily Energy Expenditure)
-            const tdee = bmr * activity;
-            
-            // Calculate goal calories
-            let goalCalories;
-            let goalTitle = '';
-            let goalDesc = '';
-            
-            switch(goal) {
-                case 'lose':
-                    goalCalories = tdee - 500;
-                    goalTitle = 'Weight Loss';
-                    goalDesc = 'Calories/day for mild weight loss (500 cal deficit)';
-                    break;
-                case 'gain':
-                    goalCalories = tdee + 500;
-                    goalTitle = 'Weight Gain';
-                    goalDesc = 'Calories/day for mild weight gain (500 cal surplus)';
-                    break;
-                default:
-                    goalCalories = tdee;
-                    goalTitle = 'Maintenance';
-                    goalDesc = 'Calories/day to maintain weight';
-            }
-            
-            // Display results
-            document.getElementById('maintenance-calories').textContent = Math.round(tdee);
-            document.getElementById('goal-calories').textContent = Math.round(goalCalories);
-            document.getElementById('goal-title').textContent = goalTitle;
-            document.getElementById('goal-description').textContent = goalDesc;
-            
-            // Show results
-            document.getElementById('calorie-results').style.display = 'block';
-            
-            // Scroll to results
-            document.getElementById('calorie-results').scrollIntoView({ behavior: 'smooth' });
         });
-
+    });
     </script>
 </body>
 </html>

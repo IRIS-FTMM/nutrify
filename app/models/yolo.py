@@ -1,18 +1,19 @@
 from ultralytics import YOLO
-from typing import List
+from typing import List, Dict
 
 model_path = r"app\models\yolov8s.pt"  # path ke model pretrained
 model = YOLO(model_path)
 
-def detect_food_labels(image_path: str) -> List[str]:
+def detect_food_labels(image_path: str) -> List[Dict]:
     results = model(image_path)
-    labels = set()
+    detections = []
     for result in results:
         for box in result.boxes:
             cls_id = int(box.cls[0].item())
             label = model.names[cls_id]
-            labels.add(label)
-    return list(labels)
+            confidence = float(box.conf[0].item())
+            detections.append({"label": label, "confidence": confidence})
+    return detections
 
 if __name__ == "__main__":
     test_img = "data/test/images/example.jpg"

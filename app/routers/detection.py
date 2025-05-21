@@ -13,17 +13,17 @@ async def detect_calories(file: UploadFile = File(...)):
     with open(image_path, "wb") as f:
         f.write(contents)
     
-    # Panggil model deteksi makanan, output: list label makanan
+    # Panggil model deteksi makanan, output: list of dict
     try:
-        labels = detect_food_labels(image_path)
+        detections = detect_food_labels(image_path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-    # Query kalori dari FatSecret untuk tiap label
     results = []
-    for label in labels:
-        calorie_info = search_calorie(label)
-        if calorie_info:
-            results.append({"food": label, "calories": calorie_info})
+    for det in detections:
+        label = det["label"]
+        confidence = det["confidence"]
+        nutrition_info = get_nutrition_info(label)
+        results.append({"food": label, "confidence": confidence, "nutrition": nutrition_info})
     
     return {"detected_foods": results}
