@@ -133,4 +133,3 @@ Terdapat 3 versi implementasi:
 ---
 
 **Dibuat untuk tugas akhir Machine Learning.**
-```
