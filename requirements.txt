@@ -11,3 +11,6 @@ torch
 torchvision
 ultralytics
 python-multipart
+wandb
+requests
+openrouter

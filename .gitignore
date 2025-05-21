@@ -8,8 +8,6 @@ __pycache__/
 *.pyd
 *.log
 *.tmp
-*.temp
-temp_uploads/
 *.pt
 *.h5
 *.ckpt
