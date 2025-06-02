@@ -74,6 +74,7 @@ Calorie-Cam/
 │   └── utils/
 ├── templates/
 │   ├── home.html
+│   ├── detect.html
 │   ├── about.html
 │   ├── information.html
 │   └── assets/

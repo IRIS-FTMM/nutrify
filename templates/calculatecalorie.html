@@ -17,6 +17,7 @@
                 </div>
                 <div class="nav-links">
                     <a href="/">Home</a>
+                    <a href="/detect">Detect Food</a>
                     <a href="calculate-calorie">Calorie Needs</a>
                     <a href="information">Food Information</a>
                     <a href="about">About</a>
@@ -100,7 +101,20 @@
                     <p class="disclaimer">These calculations are estimates. For personalized advice, consult a nutritionist.</p>
                 </div>
             </div>
+
+            <div class="tips-section" id="calorie-tips" style="display: none;">
+                <div class="calculator-container fade-in">
+                  <h3><i class="fas fa-lightbulb"></i> Healthy Lifestyle Tips</h3>
+                  <ul class="tips-list" id="tips-list">
+                    <!-- Tips will be inserted here -->
+                  </ul>
+                </div>
+              </div>
+              
+            
         </section>
+
+        
     </main>
     <footer>
         <div class="container">
@@ -115,62 +129,87 @@
     </footer>
 
     <script>
-        // Calorie Calculator Functionality
-        document.getElementById('calorie-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form values
-            const gender = document.getElementById('gender').value;
-            const age = parseInt(document.getElementById('age').value);
-            const height = parseInt(document.getElementById('height').value);
-            const weight = parseInt(document.getElementById('weight').value);
-            const activity = parseFloat(document.getElementById('activity').value);
-            const goal = document.getElementById('goal').value;
-            
-            // Calculate BMR (Basal Metabolic Rate)
-            let bmr;
-            if (gender === 'male') {
-                bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
-            } else {
-                bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
-            }
-            
-            // Calculate TDEE (Total Daily Energy Expenditure)
-            const tdee = bmr * activity;
-            
-            // Calculate goal calories
-            let goalCalories;
-            let goalTitle = '';
-            let goalDesc = '';
-            
-            switch(goal) {
-                case 'lose':
-                    goalCalories = tdee - 500;
-                    goalTitle = 'Weight Loss';
-                    goalDesc = 'Calories/day for mild weight loss (500 cal deficit)';
-                    break;
-                case 'gain':
-                    goalCalories = tdee + 500;
-                    goalTitle = 'Weight Gain';
-                    goalDesc = 'Calories/day for mild weight gain (500 cal surplus)';
-                    break;
-                default:
-                    goalCalories = tdee;
-                    goalTitle = 'Maintenance';
-                    goalDesc = 'Calories/day to maintain weight';
-            }
-            
-            // Display results
-            document.getElementById('maintenance-calories').textContent = Math.round(tdee);
-            document.getElementById('goal-calories').textContent = Math.round(goalCalories);
-            document.getElementById('goal-title').textContent = goalTitle;
-            document.getElementById('goal-description').textContent = goalDesc;
-            
-            // Show results
-            document.getElementById('calorie-results').style.display = 'block';
-            
-            // Scroll to results
-            document.getElementById('calorie-results').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('calorie-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const gender = document.getElementById('gender').value;
+        const age = parseInt(document.getElementById('age').value);
+        const height = parseInt(document.getElementById('height').value);
+        const weight = parseInt(document.getElementById('weight').value);
+        const activity = parseFloat(document.getElementById('activity').value);
+        const goal = document.getElementById('goal').value;
+    
+        let bmr;
+        if (gender === 'male') {
+            bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+        } else {
+            bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+        }
+    
+        const tdee = bmr * activity;
+    
+        let goalCalories;
+        let goalTitle = '';
+        let goalDesc = '';
+    
+        switch(goal) {
+            case 'lose':
+                goalCalories = tdee - 500;
+                goalTitle = 'Weight Loss';
+                goalDesc = 'Calories/day for mild weight loss (500 cal deficit)';
+                break;
+            case 'gain':
+                goalCalories = tdee + 500;
+                goalTitle = 'Weight Gain';
+                goalDesc = 'Calories/day for mild weight gain (500 cal surplus)';
+                break;
+            default:
+                goalCalories = tdee;
+                goalTitle = 'Maintenance';
+                goalDesc = 'Calories/day to maintain weight';
+        }
+    
+        document.getElementById('maintenance-calories').textContent = Math.round(tdee);
+        document.getElementById('goal-calories').textContent = Math.round(goalCalories);
+        document.getElementById('goal-title').textContent = goalTitle;
+        document.getElementById('goal-description').textContent = goalDesc;
+    
+        document.getElementById('calorie-results').style.display = 'block';
+        document.getElementById('calorie-results').scrollIntoView({ behavior: 'smooth' });
+    
+        // ✅ Panggil tips di sini setelah hasil kalori ditampilkan
+        fetch("http://localhost:8000/generate-calorie-tips/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                gender,
+                age,
+                height,
+                weight,
+                activity,
+                goal,
+                tdee: Math.round(tdee),
+                goal_calories: Math.round(goalCalories)
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            const tipsList = document.getElementById('tips-list');
+            tipsList.innerHTML = "";
+            data.tips.forEach(tip => {
+                const cleanTip = tip.replace(/\*\*(.*?)\*\*/g, '$1'); // remove bold markdown
+                tipsList.innerHTML += `
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>${cleanTip}</span>
+                    </li>
+               `;
+            });
+            document.getElementById('calorie-tips').style.display = 'block';
         });
+    });
     </script>
+        
 </body>

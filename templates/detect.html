@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Cam | Smart Food Calorie Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-camera"></i>
+                    <span>Calorie Cam</span>
+                </div>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/detect">Detect Food</a>
+                    <a href="calculate-calorie">Calorie Needs</a>
+                    <a href="information">Food Information</a>
+                    <a href="about">About</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="hero">
+            <h1>Discover Your Food's Nutritional Secrets</h1>
+            <p>Simply scan your meal with your camera or upload an image to get instant calorie and nutrition information</p>
+        </section>
+
+        <section class="scan-section">
+            <div class="scan-options">
+                <div class="scan-option">
+                    <div class="option-card active" id="camera-option">
+                        <i class="fas fa-camera"></i>
+                        <h3>Scan with Camera</h3>
+                        <p>Real-time food detection using your device's camera</p>
+                    </div>
+                </div>
+                <div class="scan-option">
+                    <div class="option-card" id="upload-option">
+                        <i class="fas fa-upload"></i>
+                        <h3>Upload Image</h3>
+                        <p>Upload a photo from your device</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="camera-container active" id="camera-container">
+                <video id="camera-feed" autoplay playsinline></video>
+                <div class="camera-overlay">
+                    <div class="overlay-circle"></div>
+                </div>
+            </div>
+            
+            <div class="upload-container" id="upload-container">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Upload Food Image</h3>
+                <p>Drag & drop your image here or click to browse</p>
+                <input type="file" id="file-input" accept="image/*">
+                <button class="btn btn-outline" id="upload-btn">
+                    <i class="fas fa-folder-open"></i> Choose File
+                </button>
+            </div>
+            
+            <div class="camera-controls" id="camera-controls">
+                <button class="btn btn-primary" id="capture-btn">
+                    <i class="fas fa-camera"></i> Capture
+                </button>
+                <button class="btn btn-outline" id="switch-camera">
+                    <i class="fas fa-sync-alt"></i> Switch Camera
+                </button>
+            </div>
+        </section>
+        
+        <section class="results-section" id="results-section">
+            <div class="results-header">
+                <h2>Nutrition Analysis</h2>
+                <button class="btn btn-outline" id="new-scan-btn">
+                    <i class="fas fa-redo"></i> New Scan
+                </button>
+            </div>
+            
+            <div class="food-display">
+                <div class="food-image">
+                    <img src="https://via.placeholder.com/400x400" alt="Scanned food" id="result-image">
+                </div>
+                <div class="food-info">
+                    <h3 class="food-name" id="food-name">-</h3>
+                    <p class="food-description" id="food-description">-</p>
+                    
+                    <div class="nutrition-facts">
+                        <div class="nutrition-header">
+                            <span class="nutrition-title">Nutrition Facts</span>
+                        </div>
+                        
+                        <table class="nutrition-table">
+                            <tr>
+                                <td>Calories</td>
+                                <td class="calorie-highlight" id="calories">-</td>
+                            </tr>
+                            <tr>
+                                <td>Protein</td>
+                                <td id="protein">-</td>
+                            </tr>
+                            <tr>
+                                <td>Carbohydrates</td>
+                                <td id="carbs">-</td>
+                            </tr>
+                            <tr>
+                                <td>Fats</td>
+                                <td id="fats">-</td>
+                            </tr>
+                            <tr>
+                                <td>Serving Size</td>
+                                <td id="serving">100g</td>
+                            </tr>
+                        </table>                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tips-section">
+                <h3>Healthy Eating Tips</h3>
+                <ul class="tips-list">
+                    <li>
+                        <i class="fas fa-leaf"></i>
+                        <span>This meal provides a good balance of protein and vegetables. Consider adding more leafy greens for extra fiber.</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-seedling"></i>
+                        <span>For a lower calorie option, you could use a lighter dressing or reduce the portion size by 20%.</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-apple-alt"></i>
+                        <span>Pair this with a piece of fruit for a more complete meal with additional vitamins.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-camera"></i>
+                    <span>Calorie Cam</span>
+                </div>
+                <p class="copyright">© 2025 Calorie Cam. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cameraOption = document.getElementById('camera-option');
+        const uploadOption = document.getElementById('upload-option');
+        const cameraContainer = document.getElementById('camera-container');
+        const uploadContainer = document.getElementById('upload-container');
+        const cameraControls = document.getElementById('camera-controls');
+        const resultsSection = document.getElementById('results-section');
+        const fileInput = document.getElementById('file-input');
+        const uploadBtn = document.getElementById('upload-btn');
+        const captureBtn = document.getElementById('capture-btn');
+        const switchCameraBtn = document.getElementById('switch-camera');
+        const newScanBtn = document.getElementById('new-scan-btn');
+        const cameraFeed = document.getElementById('camera-feed');
+        const resultImage = document.getElementById('result-image');
+        let capturedBlob = null;
+        let stream = null;
+        let facingMode = 'environment';
+    
+        cameraOption?.addEventListener('click', () => {
+        cameraOption.classList.add('active');
+        uploadOption.classList.remove('active');
+        cameraContainer.classList.add('active');
+        uploadContainer.classList.remove('active');
+        cameraControls.style.display = 'flex';
+        resultsSection.classList.remove('active');
+        if (!stream) initCamera();
+        });
+    
+        uploadOption?.addEventListener('click', () => {
+        uploadOption.classList.add('active');
+        cameraOption.classList.remove('active');
+        uploadContainer.classList.add('active');
+        cameraContainer.classList.remove('active');
+        cameraControls.style.display = 'none';
+        resultsSection.classList.remove('active');
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        });
+    
+        uploadBtn?.addEventListener('click', () => {
+        fileInput.click();
+        });
+    
+        fileInput?.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            capturedBlob = null;
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+            resultImage.src = event.target.result;
+            analyzeFood();
+            };
+            reader.readAsDataURL(file);
+        }
+        });
+    
+        function initCamera() {
+        navigator.mediaDevices.getUserMedia({
+            video: {
+            facingMode: facingMode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+            },
+            audio: false
+        }).then(function(s) {
+            stream = s;
+            cameraFeed.srcObject = stream;
+        }).catch(function(err) {
+            console.error("Camera error: ", err);
+            alert("Could not access the camera. Please make sure you have granted camera permissions.");
+        });
+        }
+    
+        switchCameraBtn?.addEventListener('click', () => {
+        facingMode = facingMode === 'user' ? 'environment' : 'user';
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        initCamera();
+        });
+    
+        captureBtn?.addEventListener('click', () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = cameraFeed.videoWidth;
+        canvas.height = cameraFeed.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(function(blob) {
+            capturedBlob = blob;
+            resultImage.src = canvas.toDataURL('image/jpeg');
+            analyzeFood();
+        }, 'image/jpeg');
+        });
+    
+        async function analyzeFood() {
+        let file = null;
+        let formData = new FormData();
+    
+        if (capturedBlob) {
+            file = new File([capturedBlob], "capture.jpg", { type: "image/jpeg" });
+            formData.append("file", file);
+        } else if (fileInput.files.length > 0) {
+            file = fileInput.files[0];
+            formData.append("file", file);
+        } else {
+            alert("Please upload or capture an image.");
+            return;
+        }
+    
+        document.getElementById('food-name').textContent = "Analyzing...";
+        document.getElementById('food-description').textContent = "Please wait...";
+    
+        try {
+            const response = await fetch("http://localhost:8000/detect-food/", {
+            method: "POST",
+            body: formData
+            });
+    
+            if (!response.ok) throw new Error("API error");
+    
+            const data = await response.json();
+            if (!data.detections || data.detections.length === 0) {
+            alert("No food detected.");
+            resultImage.src = "https://via.placeholder.com/400x400";
+            return;
+            }
+    
+            const bestDetection = data.detections[0];
+    
+            document.getElementById("food-name").textContent = bestDetection.label;
+            document.getElementById("food-description").textContent = `Confidence: ${(bestDetection.confidence * 100).toFixed(1)}%`;
+    
+            const nutrition = bestDetection.nutrition;
+            document.getElementById('calories').textContent = nutrition.calories ? nutrition.calories + " kcal" : "-";
+            document.getElementById('protein').textContent = nutrition.protein ? nutrition.protein + "g" : "-";
+            document.getElementById('carbs').textContent = nutrition.carbohydrates ? nutrition.carbohydrates + "g" : "-";
+            document.getElementById('fats').textContent = 
+                (nutrition.fats || nutrition.fat) 
+                        ? (nutrition.fats || nutrition.fat) + "g" 
+                        : "-";
+            document.getElementById('serving').textContent = "100g";
+
+
+    
+            const tips = bestDetection.tips || [];
+            document.querySelector('.tips-list').innerHTML = tips.map(tip => `
+            <li><i class="fas fa-leaf"></i><span>${tip}</span></li>
+            `).join('');
+    
+            resultsSection.classList.add('active');
+            cameraContainer.classList.remove('active');
+            uploadContainer.classList.remove('active');
+            capturedBlob = null;
+        } catch (error) {
+            alert("Error analyzing food: " + error.message);
+        }
+        }
+    
+        newScanBtn?.addEventListener('click', function() {
+        resultsSection.classList.remove('active');
+        cameraOption?.classList.remove('active');
+        uploadOption?.classList.remove('active');
+        cameraContainer?.classList.remove('active');
+        uploadContainer?.classList.remove('active');
+        cameraControls.style.display = 'none';
+        resultImage.src = "https://via.placeholder.com/400x400";
+        document.getElementById('food-name').textContent = "";
+        document.getElementById('food-description').textContent = "";
+        document.getElementById('calories').textContent = "-";
+        document.getElementById('protein').textContent = "-";
+        document.getElementById('carbs').textContent = "-";
+        document.getElementById('fats').textContent = "-";
+        document.getElementById('serving').textContent = "100g";
+        capturedBlob = null;
+        if (fileInput) fileInput.value = "";
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        });
+    });
+    </script>        
+</body>
+</html>
