@@ -1,0 +1,463 @@
+.detect-hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+    margin-bottom: 40px;
+}
+
+.detect-hero h2 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+
+.detect-hero p {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+/* --------- SCAN SECTION ----------- */
+.scan-section {
+    background: #fff;
+    width: 100%;
+    padding: 32px 0 28px 0;
+    border-radius: 0;
+    box-shadow: none;
+} 
+
+.scan-options {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 44px;
+  flex-wrap: wrap;
+}
+.scan-option {
+  flex: 1 1 240px;
+  min-width: 220px;
+  max-width: 330px;
+}
+.option-card {
+  background: #f5f5f5;
+  border-radius: 14px;
+  padding: 36px 22px 27px;
+  text-align: center;
+  cursor: pointer;
+  border: 2.5px solid transparent;
+  box-shadow: 0 2px 12px rgba(76, 175, 254, 0.07);
+  transition: transform 0.18s, box-shadow 0.18s, border 0.2s;
+  min-height: 180px;
+}
+.option-card i {
+  font-size: 2.7rem;
+  color: #4facfe;
+  margin-bottom: 15px;
+  transition: color 0.22s;
+}
+.option-card h3 {
+  font-size: 1.19rem;
+  margin-bottom: 10px;
+  color: #1e1e2f;
+}
+.option-card p {
+  color: #757575;
+  font-size: 1rem;
+}
+.option-card:hover, .option-card.active {
+  border-color: #4facfe;
+  background: linear-gradient(105deg, #e0f7fa 60%, #fff 100%);
+  box-shadow: 0 5px 18px rgba(0, 242, 254, 0.09);
+  transform: translateY(-4px) scale(1.03);
+}
+.option-card.active i {
+  color: #00f2fe;
+}
+
+/* --------- CAMERA & UPLOAD ----------- */
+.camera-container,
+.upload-container {
+  display: none;
+  background: #f0faff;
+  border-radius: 20px;
+  padding: 32px 0 32px 0;        /* padding atas bawah sama, kiri kanan nol */
+  margin-bottom: 24px;
+  box-shadow: 0 3px 18px rgba(79, 172, 254, 0.09);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1040px;             /* supaya upload dan kamera pas dengan feed + padding */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.camera-container.active,
+.upload-container.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.camera-container {
+  position: relative;
+  width: 100%;
+  max-width: 1040px;             /* sama dengan .upload-container agar rata */
+  min-height: 540px;             /* proporsional dengan feed 960x480 */
+  margin: 0 auto 28px auto;
+}
+
+#camera-feed {
+  width: 960px;
+  height: 480px;
+  border-radius: 22px;
+  object-fit: cover;
+  box-shadow: 0 2px 18px rgba(76,175,254,0.14);
+  margin-bottom: 18px;
+  background: #e0e0e0;
+}
+
+.camera-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 280px;
+    height: 280px;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+  
+.overlay-circle {
+    width: 280px;
+    height: 280px;
+    border: 4px dashed #4facfe;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+}
+
+.upload-container {
+  border: 2.2px dashed #b6e0fb;
+  background: #f8fcff;
+  padding: 40px 0 40px 0;         /* padding kiri-kanan nol, supaya sejajar feed */
+  text-align: center;
+  margin-top: 0;
+  max-width: 1040px;              /* sama seperti .camera-container */
+  min-height: 480px;              /* biar proporsional dengan feed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-container i {
+  font-size: 3.5rem;
+  color: #4facfe;
+  margin-bottom: 18px;
+}
+
+.upload-container h3 {
+  font-size: 1.25rem;
+  margin-bottom: 14px;
+  color: #1e1e2f;
+}
+
+.upload-container p {
+  color: #757575;
+  font-size: 1.08rem;
+  margin-bottom: 22px;
+}
+
+#upload-btn {
+    background: #4facfe;
+    color: #fff;
+    border-radius: 30px;
+    font-size: 1.08rem;
+    font-weight: 500;
+    padding: 12px 38px;
+    border: none;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: 0 1px 6px rgba(79,172,254,0.07);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+  
+#upload-btn i {
+    color: #fff;
+    transition: color 0.2s;
+}
+  
+#upload-btn:hover {
+    background: #00f2fe;
+    color: #1e1e2f;
+}
+  
+#upload-btn:hover i {
+    color: #1e1e2f;
+}   
+
+#file-input {
+  display: none;
+}
+
+/* ----------- CAMERA CONTROLS ------------- */
+.camera-controls {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 10px;
+  margin-bottom: 22px;
+}
+
+#capture-btn, #switch-camera {
+    padding: 24px 40px;
+    border-radius: 30px;
+    font-size: 1.04rem;
+    font-weight: 500;
+    border: none;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: #4facfe;
+    color: #fff;
+    box-shadow: 0 1px 6px rgba(79,172,254,0.07);
+}
+  
+#capture-btn:hover,
+#switch-camera:hover {
+    background: #00f2fe;
+    color: #1e1e2f;
+}
+  
+
+/* ----------- RESULT SECTION ------------- */
+.results-section {
+    background: #f5f5f5; /* Warna sama seperti .option-card */
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(76, 175, 254, 0.07);
+    padding: 38px 0 32px 0;
+    margin-bottom: 36px;
+    display: none;
+    animation: fadeInDetect 0.45s;
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2.5px solid transparent;   /* opsional: tambahkan efek border saat hover */
+    text-align: left; /* supaya konten tetap rapi */
+}
+  
+.results-section.active {
+  display: block;
+}
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding: 0 30px 7px 30px;
+    border-bottom: 1.2px solid #d6e6f9;
+}
+.results-header h2 {
+    color: #15395b;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 0;
+    padding: 0;
+}
+  
+#new-scan-btn {
+    background: #4facfe;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.08rem;
+    font-weight: 500;
+    padding: 12px 38px;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    box-shadow: 0 1px 6px rgba(79,172,254,0.07);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    outline: none;
+}
+  
+#new-scan-btn:hover {
+    background: #00f2fe;
+    color: #1e1e2f;
+}
+  
+.food-display {
+  display: flex;
+  gap: 38px;
+  margin-bottom: 30px;
+  align-items: flex-start;
+  justify-content: center;
+}
+.food-image {
+  width: 240px;
+  min-width: 180px;
+  height: 240px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(76,175,254,0.09);
+  background: #f3faff;
+  flex-shrink: 0;
+}
+.food-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.food-info {
+  flex: 1;
+  padding-top: 2px;
+}
+.food-name {
+  font-size: 1.26rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #1e1e2f;
+}
+.food-description {
+  color: #757575;
+  margin-bottom: 13px;
+  font-size: 1rem;
+}
+.nutrition-facts {
+  background: #e9faff;
+  border-radius: 10px;
+  padding: 20px 18px 15px 18px;
+  margin-bottom: 7px;
+}
+.nutrition-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.nutrition-title {
+  font-weight: 600;
+  color: #0288d1;
+}
+.nutrition-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.05rem;
+}
+.nutrition-table tr:not(:last-child) {
+  border-bottom: 1px solid #cdeffd;
+}
+.nutrition-table td {
+  padding: 9px 0;
+}
+.nutrition-table td:last-child {
+  text-align: right;
+  font-weight: 600;
+}
+.calorie-highlight {
+  font-size: 1.2rem;
+  color: #0288d1;
+}
+
+/* ----------- TIPS SECTION ----------- */
+.tips-section {
+    padding: 28px 18px 20px 18px;
+    text-align: center;
+}
+
+.tips-section h3 {
+    color: #0096c7;
+    font-size: 1.21rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.tips-section h3 i {
+    color: #4facfe;
+    font-size: 1.19rem;
+    margin-top: 2px;
+}
+
+.tips-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tips-list li {
+    background: #e0f7fa;
+    border-left: 4px solid #4facfe;
+    border-radius: 7px;
+    margin-bottom: 13px;
+    padding: 13px 15px 11px 13px;
+    display: flex;
+    align-items: flex-start;
+    font-size: 1rem;
+    color: #444;
+    gap: 11px;
+    box-shadow: 0 1px 3px rgba(79,172,254,0.06);
+}
+
+.tips-list li i {
+    color: #00f2fe;
+    font-size: 1.15rem;
+    margin-top: 2.5px;
+    flex-shrink: 0;
+}
+
+.tips-list li span {
+    text-align: justify;
+    display: block;
+    width: 100%;
+    color: #444;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: 1rem;
+}
+
+@keyframes fadeInDetect {
+  from { opacity: 0; transform: translateY(24px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* -------------- RESPONSIVE -------------- */
+@media (max-width: 1100px) {
+  .scan-section { max-width: 99vw; }
+  .results-section { max-width: 99vw; }
+}
+
+@media (max-width: 900px) {
+  .scan-options { flex-direction: column; gap: 24px; }
+  .scan-option { max-width: 100%; }
+  .food-display { flex-direction: column; align-items: center; gap: 24px; }
+  .food-image { width: 90vw; max-width: 280px; height: 90vw; max-height: 280px; }
+  .results-section, .scan-section { padding-left: 2vw; padding-right: 2vw; }
+  .camera-container, .upload-container { max-width: 98vw; }
+}
+@media (max-width: 600px) {
+  .detect-hero h1 { font-size: 2rem; }
+  .scan-section, .results-section { padding: 22px 2vw 15px; }
+  .option-card { min-height: 110px; padding: 18px 8px 12px; }
+  .camera-container, .upload-container { padding: 10px 0 6px; }
+  .tips-section { padding: 0 2vw; }
+  .food-image { min-width: 110px; width: 70vw; height: 70vw; }
+  .nutrition-facts { padding: 11px 7px 8px 8px; }
+  #camera-feed { width: 95vw; max-width: 98vw; height: 65vw; max-height: 300px; }
+  .camera-overlay { width: 65vw !important; height: 65vw !important; max-width: 240px; max-height: 240px; }
+  .overlay-circle { width: 120px; height: 120px; }
+}
+.camera-container:not(.active), .upload-container:not(.active) {
+    display: none !important;
+  }
+  

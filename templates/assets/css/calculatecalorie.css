@@ -1,0 +1,284 @@
+/* -------------- CALCULATE CALORIE HERO -------------- */
+.calculatecalorie-hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+    margin-bottom: 40px;
+}
+
+.calculatecalorie-hero h2 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.calculatecalorie-hero p {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 0;
+}
+
+/* -------------- CALCULATOR CONTAINER -------------- */
+.calculator-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 32px;
+}
+.calculator-container {
+    background: #f5f5f5;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(76,175,254,0.09);
+    padding: 38px 32px 30px 32px;
+    max-width: 540px;
+    width: 100%;
+    margin-bottom: 28px;
+}
+
+.calculator-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.calculator-container form .btn.btn-primary {
+    align-self: center;
+}
+
+
+.calculator-container h2 {
+    color: #15395b;
+    font-size: 1.55rem;
+    margin-bottom: 9px;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.calculator-container p {
+    color: #6c6c80;
+    font-size: 1.07rem;
+    margin-bottom: 23px;
+}
+
+.form-group {
+    margin-bottom: 17px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #18375b;
+    margin-bottom: 6px;
+    font-size: 1rem;
+}
+
+.form-group input, 
+.form-group select {
+    border: 1.6px solid #b6e0fb;
+    border-radius: 9px;
+    padding: 11px 13px;
+    font-size: 1.08rem;
+    font-family: inherit;
+    color: #232346;
+    background: #fff;
+    outline: none;
+    transition: border 0.18s;
+}
+.form-group input:focus, 
+.form-group select:focus {
+    border-color: #4facfe;
+    background: #e8f7ff;
+}
+
+.btn.btn-primary {
+    background: #4facfe;
+    color: #fff;
+    border-radius: 30px;
+    font-size: 1.11rem;
+    font-weight: 600;
+    padding: 13px 40px;
+    border: none;
+    box-shadow: 0 1px 6px rgba(79,172,254,0.07);
+    transition: background 0.2s, color 0.2s;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 9px;
+    cursor: pointer;
+}
+
+.btn.btn-primary:hover {
+    background: #00f2fe;
+    color: #1e1e2f;
+}
+.btn.btn-primary i { color: #fff; transition: color 0.2s;}
+.btn.btn-primary:hover i { color: #1e1e2f; }
+
+/* ---------- CALCULATOR RESULTS ---------- */
+.result-tips-group {
+    margin-top: 34px;
+    background: #f5f5f5;
+    border-radius: 15px;
+    box-shadow: 0 2px 12px rgba(76,175,254,0.08);
+    padding: 25px 18px 22px 18px;
+}
+.result-tips-group .results {
+    margin-bottom: 22px;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+}
+.result-tips-group .tips-section {
+    background: #f8faff;
+    border-radius: 10px;
+    box-shadow: 0 1px 5px rgba(79,172,254,0.04);
+    padding: 19px 13px 7px 13px;
+    margin: 0;
+}
+
+.result-tips-group, .calculator-container {
+    display: block;
+}
+
+.results {
+    margin-top: 22px;
+}
+.results h3 {
+    font-size: 1.18rem;
+    color: #15395b;
+    margin-bottom: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+}
+.result-cards {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
+    justify-content: center;
+}
+.result-card {
+    background: linear-gradient(105deg, #e0f7fa 60%, #fff 100%);
+    border-radius: 13px;
+    box-shadow: 0 2px 10px rgba(76,175,254,0.07);
+    padding: 19px 26px 12px 26px;
+    text-align: center;
+    flex: 1 1 140px;
+    min-width: 120px;
+}
+.result-card h4 {
+    color: #0288d1;
+    font-size: 1.13rem;
+    margin-bottom: 7px;
+    font-weight: 700;
+}
+.result-card p {
+    font-size: 1.39rem;
+    font-weight: 700;
+    color: #18375b;
+    margin-bottom: 2px;
+}
+.result-card small {
+    color: #757575;
+    font-size: 0.97rem;
+}
+.disclaimer {
+    color: #888;
+    font-size: 0.93rem;
+    margin-top: 13px;
+    text-align: center;
+    opacity: 0.92;
+}
+
+/* --------- TIPS SECTION --------- */
+.tips-section {
+    display: block;     /* JANGAN pakai flex di sini! */
+    margin-top: 0;
+    padding: 0;
+    width: 100%;
+    padding: 19px 13px 7px 13px;
+    margin: 0;
+}
+
+.tips-section {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+
+.tips-section .calculator-container {
+    padding: 25px 18px 12px 18px;
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+.tips-section h3 {
+    color: #0096c7;
+    margin-bottom: 13px;
+    font-size: 1.13rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    text-align: center;
+}
+
+.tips-list {
+    margin: 0;
+    padding: 0;
+}
+
+.tips-list li {
+    background: #e0f7fa;
+    border-left: 4px solid #4facfe;
+    border-radius: 7px;
+    margin-bottom: 10px;
+    padding: 12px 15px 10px 13px;
+    display: flex;
+    align-items: flex-start;
+    font-size: 1rem;
+    color: #444;
+    gap: 11px;
+    box-shadow: 0 1px 3px rgba(79,172,254,0.06);
+}
+
+.tips-list li span {
+    text-align: justify;      /* <-- RATAKAN TEKS */
+    display: block;
+    width: 100%;
+}
+
+.tips-list li i {
+    color: #00f2fe;
+    font-size: 1.12rem;
+    margin-top: 2px;
+}
+
+.fade-in {
+    animation: fadeInDetect 0.55s;
+}
+
+@keyframes fadeInDetect {
+  from { opacity: 0; transform: translateY(22px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+/* -------------- RESPONSIVE -------------- */
+@media (max-width: 900px) {
+    .calculator-container, .tips-section .calculator-container { max-width: 97vw; padding-left: 3vw; padding-right: 3vw;}
+    .result-cards { flex-direction: column; gap: 13px;}
+}
+@media (max-width: 600px) {
+    .calculatecalorie-hero { padding: 30px 2vw 16px 2vw;}
+    .calculatecalorie-hero h2 { font-size: 1.3rem; }
+    .calculatecalorie-hero p { font-size: 0.98rem; }
+    .calculator-container, .tips-section .calculator-container { padding: 13px 3vw 9px 3vw; }
+    .result-card { padding: 14px 7vw 9px 7vw; }
+}

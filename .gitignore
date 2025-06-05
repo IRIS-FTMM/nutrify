@@ -22,3 +22,15 @@ test_images-v0.4
 train/ 
 val/
 templates/assets/images
+UECFOOD100/
+balanced.csv
+new_data/
+data_info.csv
+data9.yaml
+dataset109.yaml
+multiple_data.csv
+filtered_food_dataset.csv
+test_data.csv
+train_data.csv
+val_data.csv
+filtered_food_data_train.xlsx

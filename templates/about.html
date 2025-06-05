@@ -5,35 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Calorie Cam | Smart Food Scanner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="stylesheet" href="static/css/main.css" />
+    <link rel="stylesheet" href="static/css/about.css">
 </head>
 <body>
-    <header>
+    <header class="navbar">
         <div class="container">
-            <nav>
-                <div class="logo">
-                    <i class="fas fa-camera"></i>
-                    <span>Calorie Cam</span>
-                </div>
-                <div class="nav-links">
-                    <a href="/">Home</a>
-                    <a href="/detect">Detect Food</a>
-                    <a href="calculate-calorie">Calorie Needs</a>
-                    <a href="information">Food Information</a>
-                    <a href="about">About</a>
-                </div>
-            </nav>
+          <div class="logo">
+            <i class="fas fa-camera"></i> Calorie Cam
+          </div>
+          <nav>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/detect">Detect Food</a></li>
+              <li><a href="/calculate-calorie">Calorie Needs</a></li>
+              <li><a href="/information">Food Information</a></li>
+              <li><a href="/about">About</a></li>
+            </ul>
+          </nav>
         </div>
-    </header>
+      </header>
+      
 
+    <section class="about-hero">
+            <h2>About Calorie Cam</21>
+            <p>Revolutionizing how you track your nutrition</p>
+    </section>
     <main>
-        <!-- About Section -->
-        <section class="about-hero">
-            <div class="container">
-                <h1>About Calorie Cam</h1>
-                <p class="subtitle">Revolutionizing how you track your nutrition</p>
-            </div>
-        </section>
 
         <section class="about-content">
             <div class="container">
@@ -128,17 +126,12 @@
         </section>
     </main>
 
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <i class="fas fa-camera"></i>
-                    <span>Calorie Cam</span>
-                </div>
-                <p class="copyright">© 2025 Calorie Cam. All rights reserved.</p>
-            </div>
+          <p>&copy; 2025 Calorie Cam. All rights reserved.</p>
         </div>
-    </footer>
+      </footer>
+      
 
     <script src="script.js"></script>
 </body>

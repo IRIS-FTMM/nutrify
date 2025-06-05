@@ -4,95 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Information | Calorie Cam</title>
+    <link rel="stylesheet" href="static/css/main.css" />
+    <link rel="stylesheet" href="static/css/information.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="static/css/styles.css">
 </head>
 <body>
-    <!-- Rest of your HTML remains exactly the same -->
-    <header>
+    <header class="navbar">
         <div class="container">
+            <div class="logo">
+                <i class="fas fa-camera"></i> Calorie Cam
+            </div>
             <nav>
-                <div class="logo">
-                    <i class="fas fa-camera"></i>
-                    <span>Calorie Cam</span>
-                </div>
-                <div class="nav-links">
-                    <a href="/">Home</a>
-                    <a href="/detect">Detect Food</a>
-                    <a href="calculate-calorie">Calorie Needs</a>
-                    <a href="information">Food Information</a>
-                    <a href="about">About</a>
-                </div>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/detect">Detect Food</a></li>
+                    <li><a href="/calculate-calorie">Calorie Needs</a></li>
+                    <li><a href="/information">Food Information</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
-    <main>
-        <div class="container">
-            <h1>Scanable Food Information</h1>
-            <p class="subtitle">Berikut adalah contoh gambar makanan/minuman yang bisa dikenali</p>
-    
-            <div class="food-gallery">
-                {% for item in entries %}
-                <div class="food-item">
-                    <img src="{{ url_for('static', path=item.file) }}" alt="{{ item.label }}">
-                    <div class="food-label">{{ item.label }}</div>
-                </div>
-                {% endfor %}
-            </div>
+    <!-- Hero Section -->
+    <section class="information-hero">
+        <h2>Food Information</h2>
+        <p>Search for a food to see its image and calories as detected by Calorie Cam</p>
+    </section>
+
+    <main class="info-section">
+        <div class="info-container">
+            <input type="text" id="food-search-input" class="food-search-input" placeholder="Type food name...">
+            <div id="autocomplete-list" class="autocomplete-list"></div>
+            <div id="food-detail" class="food-detail-card" style="display:none"></div>
         </div>
     </main>
-    
 
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <i class="fas fa-camera"></i>
-                    <span>Calorie Cam</span>
-                </div>
-                <p class="copyright">© 2025 Calorie Cam. All rights reserved.</p>
-            </div>
+          <p>&copy; 2025 Calorie Cam. All rights reserved.</p>
         </div>
-    </footer>
+      </footer>    
 
     <script>
-        // Category switching functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tab switching
-            const tabs = document.querySelectorAll('.category-tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    tabs.forEach(t => t.classList.remove('active'));
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-                    
-                    // Hide all category contents
-                    document.querySelectorAll('.category-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    
-                    // Show selected category content
-                    const categoryId = this.getAttribute('data-category');
-                    document.getElementById(`${categoryId}-category`).classList.add('active');
-                });
-            });
-            
-            // Nutrition details toggle
-            const nutritionToggles = document.querySelectorAll('.show-nutrition');
-            nutritionToggles.forEach(toggle => {
-                toggle.addEventListener('click', function() {
-                    const details = this.nextElementSibling;
-                    if (details.style.display === 'block') {
-                        details.style.display = 'none';
-                        this.textContent = 'Show nutrition details';
-                    } else {
-                        details.style.display = 'block';
-                        this.textContent = 'Hide nutrition details';
-                    }
-                });
-            });
+        // --- SAMPIL DATA, GANTI DENGAN AMBIL DARI BACKEND JIKA PERLU ---
+        const foods = [
+        {
+            name: "Nasi Goreng",
+            img: "https://your-storage.com/nasigoreng.jpg",
+            calories: 250
+        },
+        {
+            name: "Ayam Bakar",
+            img: "https://your-storage.com/ayambakar.jpg",
+            calories: 180
+        },
+        {
+            name: "Jus Alpukat",
+            img: "https://your-storage.com/jusalpukat.jpg",
+            calories: 160
+        }
+        // ...dan seterusnya
+        ];
+
+        
+        // --- AUTOCOMPLETE & SHOW DETAIL ---
+        const input = document.getElementById("food-search-input");
+        const list = document.getElementById("autocomplete-list");
+        const detail = document.getElementById("food-detail");
+
+        input.addEventListener("input", function() {
+        const val = this.value.toLowerCase();
+        list.innerHTML = "";
+        detail.style.display = "none";
+        if (val.length < 1) return;
+        const matches = foods.filter(f => f.name.toLowerCase().includes(val));
+        matches.forEach(food => {
+            const div = document.createElement("div");
+            div.className = "autocomplete-item";
+            div.textContent = food.name;
+            div.onclick = function() {
+                showDetail(food);
+                list.innerHTML = "";
+                input.value = food.name;
+            };
+            list.appendChild(div);
+        });
+        list.style.display = matches.length ? "block" : "none";
+        });
+
+        function showDetail(food) {
+            detail.innerHTML = `
+                <div class="food-detail-card-inner">
+                    <img src="${food.img}" alt="${food.name}">
+                    <div class="food-detail-info">
+                        <h3>${food.name}</h3>
+                        <div class="calories">Calories: <b>${food.calories} kcal</b></div>
+                    </div>
+                </div>
+            `;
+            detail.style.display = "block";
+        }
+
+        // Optional: Hide autocomplete on click outside
+        document.addEventListener("click", function(e){
+        if (!input.contains(e.target) && !list.contains(e.target)) {
+            list.style.display = "none";
+        }
         });
     </script>
 </body>

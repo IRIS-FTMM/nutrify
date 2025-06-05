@@ -1,38 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calorie Cam | Home</title>
-  <link rel="stylesheet" href="static/css/main.css" />
-  <link rel="stylesheet" href="static/css/home.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Information | Calorie Cam</title>
+    <style>
+      body { margin: 0; }
+      .home-hero {
+        background: linear-gradient(rgba(0,0,0,.60), rgba(0,0,0,.60)),
+          url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        text-align: center;
+        padding: 100px 20px 80px 20px;
+        margin-bottom: 0px;
+        position: relative;
+      }
+      .home-hero h2 { font-size: 3rem; font-weight: 700; margin-bottom: 18px; }
+      .home-hero .subtitle, .home-hero p { font-size: 1.25rem; margin-bottom: 0; opacity: 0.96; }
+    </style>
+    <link rel="stylesheet" href="static/css/main.css" />
+    <link rel="stylesheet" href="static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <header class="navbar">
-    <div class="container">
-      <div class="logo">Calorie Cam</div>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/detect">Detect Food</a></li>
-          <li><a href="/calculate-calorie">Calorie Needs</a></li>
-          <li><a href="/information">Food Information</a></li>
-          <li><a href="/about">About</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-camera"></i> Calorie Cam
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/detect">Detect Food</a></li>
+                    <li><a href="/calculate-calorie">Calorie Needs</a></li>
+                    <li><a href="/information">Food Information</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+  
+  <!-- HERO SECTION: full width, single, clean -->
+  <section class="home-hero">
+    <h2>Calorie Cam</h2>
+    <p class="subtitle">Discover food insights instantly using your camera or images. Personalized, fast, and smart.</p>
+  </section> 
 
   <main>
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="container">
-        <h1>Calorie Cam</h1>
-        <p>Discover food insights instantly using your camera or images. Personalized, fast, and smart.</p>
-      </div>
-    </section>
-
     <!-- Features Section -->
     <section class="features">
       <div class="container features-grid">
@@ -42,9 +58,9 @@
           <p>Use your camera to instantly identify foods and calories.</p>
         </div>
         <div class="feature-box">
-          <img src="https://cdn-icons-png.flaticon.com/512/545/545674.png" alt="Upload Image">
-          <h3>Upload Food Image</h3>
-          <p>Upload pictures from your gallery to analyze food nutrition.</p>
+          <img src="https://cdn-icons-png.flaticon.com/512/8191/8191607.png" alt="Detect by Image">
+          <h3>Detect by Image</h3>
+          <p>Upload a photo from your gallery to analyze food and calories instantly.</p>
         </div>
         <div class="feature-box">
           <img src="https://cdn-icons-png.flaticon.com/512/1648/1648922.png" alt="Calorie Needs">
@@ -60,8 +76,8 @@
         <a href="/detect" class="card">
           <img src="https://cdn-icons-png.flaticon.com/512/1046/1046751.png" alt="Detect Food">
           <h4>Detect Food</h4>
-          <p>Scan meals to identify food and nutrients automatically.</p>
-        </a>
+          <p>Scan meals by camera or image to identify food and nutrients automatically.</p>
+        </a>        
         <a href="/calculate-calorie" class="card">
           <img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png" alt="Calorie Needs">
           <h4>Calorie Needs</h4>
