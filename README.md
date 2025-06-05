@@ -34,7 +34,7 @@
 
 1. **Clone repository:**
    ```bash
-   git clone https://github.com/USERNAME/calorie-cam.git
+   git clone https://github.com/arknsa/calorie-cam.git
    cd Calorie-Cam
    ```
 
