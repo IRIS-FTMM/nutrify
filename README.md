@@ -35,13 +35,13 @@
 1. **Clone repository:**
    ```bash
    git clone https://github.com/arknsa/calorie-cam.git
-   cd Calorie-Cam
+   cd calorie-cam
    ```
 
 2. **Buat virtual environment (opsional):**
    ```bash
-   python -m venv venv
-   venv\Scripts\activate
+   python -m venv env
+   .\env\Scripts\activate
    ```
 
 3. **Install dependencies:**

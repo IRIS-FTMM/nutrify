@@ -29,14 +29,20 @@
     <!-- Hero Section -->
     <section class="information-hero">
         <h2>Food Information</h2>
-        <p>Search for a food to see its image and calories as detected by Calorie Cam</p>
+        <p>Search for a food to see its calories and nutrition as detected by Calorie Cam</p>
     </section>
 
     <main class="info-section">
         <div class="info-container">
-            <input type="text" id="food-search-input" class="food-search-input" placeholder="Type food name...">
-            <div id="autocomplete-list" class="autocomplete-list"></div>
-            <div id="food-detail" class="food-detail-card" style="display:none"></div>
+            <!-- Static food list -->
+            <ul>
+                {% for entry in entries %}
+                <li>
+                    <h3>{{ entry.label }}</h3>
+                    <p>Calories: {{ entry.calories }} kcal</p>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     </main>
 
@@ -44,7 +50,7 @@
         <div class="container">
           <p>&copy; 2025 Calorie Cam. All rights reserved.</p>
         </div>
-      </footer>    
+    </footer>
 
     <script>
         // --- SAMPIL DATA, GANTI DENGAN AMBIL DARI BACKEND JIKA PERLU ---

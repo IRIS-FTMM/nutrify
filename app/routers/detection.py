@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from typing import List
-from app.models.yolo import detect_food_labels
+from app.models.roboflow import detect_food_labels
 from app.utils.fatsecret_client import search_calorie
 
 router = APIRouter(prefix="/detect", tags=["detection"])
