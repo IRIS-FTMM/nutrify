@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calorie Cam | Smart Food Calorie Detection</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="static/css/main.css" />
-    <link rel="stylesheet" href="static/css/detect.css" />
+    <link rel="stylesheet" href="static/assets/css/main.css" />
+    <link rel="stylesheet" href="static/assets/css/detect.css" />
 </head>
 <body>
+    <!-- Loading overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+  
     <header class="navbar">
         <div class="container">
             <div class="logo">
@@ -62,7 +67,7 @@
             <div class="upload-container" id="upload-container">
                 <i class="fas fa-cloud-upload-alt"></i>
                 <h3>Upload Food Image</h3>
-                <p>Drag & drop your image here or click to browse</p>
+                <p>Upload your image here or paste from food information page (<kbd>Ctrl+V</kbd>)</p>
                 <input type="file" id="file-input" accept="image/*">
                 <button class="btn btn-outline" id="upload-btn">
                     <i class="fas fa-folder-open"></i> Choose File
@@ -162,56 +167,46 @@
       
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const cameraOption = document.getElementById('camera-option');
-        const uploadOption = document.getElementById('upload-option');
-        const cameraContainer = document.getElementById('camera-container');
-        const uploadContainer = document.getElementById('upload-container');
+        const cameraOption   = document.getElementById('camera-option');
+        const uploadOption   = document.getElementById('upload-option');
+        const cameraContainer= document.getElementById('camera-container');
+        const uploadContainer= document.getElementById('upload-container');
         const cameraControls = document.getElementById('camera-controls');
         const resultsSection = document.getElementById('results-section');
-        const fileInput = document.getElementById('file-input');
-        const uploadBtn = document.getElementById('upload-btn');
-        const captureBtn = document.getElementById('capture-btn');
-        const switchCameraBtn = document.getElementById('switch-camera');
-        const newScanBtn = document.getElementById('new-scan-btn');
-        const cameraFeed = document.getElementById('camera-feed');
-        const resultImage = document.getElementById('result-image');
-        let capturedBlob = null;
-        let stream = null;
-        let facingMode = 'environment';
-    
-        // ===== NEW: Untuk serving size dinamis =====
-        let nutritionBase = null;
-        let servingBase = 100;
-        let servingInput = null;
-    
-        // --- STATE AWAL ---
+        const fileInput      = document.getElementById('file-input');
+        const uploadBtn      = document.getElementById('upload-btn');
+        const captureBtn     = document.getElementById('capture-btn');
+        const switchCameraBtn= document.getElementById('switch-camera');
+        const newScanBtn     = document.getElementById('new-scan-btn');
+        const cameraFeed     = document.getElementById('camera-feed');
+        const resultImage    = document.getElementById('result-image');
+        let capturedBlob     = null;
+        let stream           = null;
+        let facingMode       = 'environment';
+
+        let nutritionBase    = null;
+        let servingBase      = 100;
+        let servingInput     = null;
+
+        // --- INITIAL STATE ---
         function resetToInitialState() {
-            cameraOption.classList.remove('active');
-            uploadOption.classList.remove('active');
-            cameraContainer.classList.remove('active');
-            uploadContainer.classList.remove('active');
+            [cameraOption, uploadOption].forEach(el => el.classList.remove('active'));
+            [cameraContainer, uploadContainer].forEach(el => el.classList.remove('active'));
             cameraControls.style.display = 'none';
             resultsSection.classList.remove('active');
             resultImage.src = "https://via.placeholder.com/400x400";
-            document.getElementById('food-name').textContent = "";
-            document.getElementById('food-description').textContent = "";
-            document.getElementById('calories').textContent = "-";
-            document.getElementById('protein').textContent = "-";
-            document.getElementById('carbs').textContent = "-";
-            document.getElementById('fats').textContent = "-";
-            // reset serving input jika ada
+            ['food-name','food-description','calories','protein','carbs','fats'].forEach(id => {
+                document.getElementById(id).textContent = id==='calories'?'-':'-';
+            });
             servingInput = document.getElementById('serving-input');
-            if (servingInput) servingInput.value = 100;
+            if(servingInput) servingInput.value = 100;
+            if (stream) { stream.getTracks().forEach(track => track.stop()); stream = null; }
             capturedBlob = null;
-            if (fileInput) fileInput.value = "";
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                stream = null;
-            }
         }
         resetToInitialState();
-    
-        cameraOption?.addEventListener('click', () => {
+
+        // --- TOGGLE CAMERA / UPLOAD ---
+        cameraOption.addEventListener('click', () => {
             cameraOption.classList.add('active');
             uploadOption.classList.remove('active');
             cameraContainer.classList.add('active');
@@ -220,191 +215,159 @@
             resultsSection.classList.remove('active');
             if (!stream) initCamera();
         });
-    
-        uploadOption?.addEventListener('click', () => {
+
+        uploadOption.addEventListener('click', () => {
             uploadOption.classList.add('active');
             cameraOption.classList.remove('active');
             uploadContainer.classList.add('active');
             cameraContainer.classList.remove('active');
             cameraControls.style.display = 'none';
             resultsSection.classList.remove('active');
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                stream = null;
-            }
+            if (stream) { stream.getTracks().forEach(track => track.stop()); stream = null; }
         });
-    
-        uploadBtn?.addEventListener('click', () => {
-            fileInput.click();
+
+        // --- UPLOAD BUTTON & FILE INPUT ---
+        uploadBtn.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            if (!e.target.files.length) return;
+            capturedBlob = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = event => {
+                resultImage.src = event.target.result;
+                analyzeFood();
+            };
+            reader.readAsDataURL(capturedBlob);
         });
-    
-        fileInput?.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                capturedBlob = null;
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    resultImage.src = event.target.result;
+
+        // --- PASTE SUPPORT ---
+        document.addEventListener('paste', function(e) {
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') === 0) {
+                    capturedBlob = items[i].getAsFile();
+                    const url = URL.createObjectURL(capturedBlob);
+                    resultImage.src = url;
                     analyzeFood();
-                };
-                reader.readAsDataURL(file);
+                    e.preventDefault();
+                    break;
+                }
             }
         });
-    
+
+        // --- CAMERA INIT / SWITCH / CAPTURE ---
         function initCamera() {
-            navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: facingMode,
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                },
-                audio: false
-            }).then(function(s) {
-                stream = s;
-                cameraFeed.srcObject = stream;
-            }).catch(function(err) {
-                console.error("Camera error: ", err);
-                alert("Could not access the camera. Please make sure you have granted camera permissions.");
-            });
+            navigator.mediaDevices.getUserMedia({ video: { facingMode }})
+                .then(s => { stream = s; cameraFeed.srcObject = s; })
+                .catch(err => { alert("Camera error: " + err); });
         }
-    
-        switchCameraBtn?.addEventListener('click', () => {
+        switchCameraBtn.addEventListener('click', () => {
             facingMode = facingMode === 'user' ? 'environment' : 'user';
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                stream = null;
-            }
+            if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
             initCamera();
         });
-    
-        captureBtn?.addEventListener('click', () => {
+        captureBtn.addEventListener('click', () => {
             const canvas = document.createElement('canvas');
-            canvas.width = cameraFeed.videoWidth;
+            canvas.width  = cameraFeed.videoWidth;
             canvas.height = cameraFeed.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
-            canvas.toBlob(function(blob) {
+            canvas.getContext('2d').drawImage(cameraFeed, 0, 0);
+            canvas.toBlob(blob => {
                 capturedBlob = blob;
-                resultImage.src = canvas.toDataURL('image/jpeg');
+                resultImage.src = URL.createObjectURL(blob);
                 analyzeFood();
             }, 'image/jpeg');
         });
-    
+
+        // --- NEW SCAN ---
+        newScanBtn.addEventListener('click', resetToInitialState);
+
+        // --- ANALYZE FOOD (EXISTING ROUTINE) ---
         async function analyzeFood() {
-            let file = null;
             let formData = new FormData();
-        
             if (capturedBlob) {
-                file = new File([capturedBlob], "capture.jpg", { type: "image/jpeg" });
-                formData.append("file", file);
-            } else if (fileInput.files.length > 0) {
-                file = fileInput.files[0];
-                formData.append("file", file);
+                formData.append("file", new File([capturedBlob], "capture.jpg", { type: capturedBlob.type }));
             } else {
-                alert("Please upload or capture an image.");
+                alert("Please upload, paste, or capture an image.");
                 return;
             }
-        
+
             document.getElementById('food-name').textContent = "Analyzing...";
             document.getElementById('food-description').textContent = "Please wait...";
-        
+
             try {
-                const response = await fetch("http://localhost:8000/detect-food/", {
-                    method: "POST",
-                    body: formData
-                });
-        
+                const response = await fetch("/detect-food/", { method: "POST", body: formData });
                 if (!response.ok) throw new Error("API error");
-        
+
                 const data = await response.json();
                 if (!data.detections || data.detections.length === 0) {
                     alert("No food detected.");
-                    resultImage.src = "https://via.placeholder.com/400x400";
                     return;
                 }
-        
-                const bestDetection = data.detections[0];
-        
-                document.getElementById("food-name").textContent = bestDetection.label;
-                document.getElementById("food-description").textContent = `Confidence: ${(bestDetection.confidence * 100).toFixed(1)}%`;
-        
-                const nutrition = bestDetection.nutrition;
-                document.getElementById('calories').textContent = nutrition.calories ? nutrition.calories + " kcal" : "-";
-                document.getElementById('protein').textContent = nutrition.protein ? nutrition.protein + "g" : "-";
-                document.getElementById('carbs').textContent = nutrition.carbohydrates ? nutrition.carbohydrates + "g" : "-";
-                document.getElementById('fats').textContent = (nutrition.fats || nutrition.fat) ? (nutrition.fats || nutrition.fat) + "g" : "-";
-        
-                // ==== SERVING SIZE DYNAMIC ====
+
+                const best = data.detections[0];
+                document.getElementById("food-name").textContent = best.label || "Unknown Food";
+                document.getElementById("food-description").textContent =
+                    `Confidence: ${(best.confidence * 100).toFixed(1)}%`;
+
+                const nutrition = best.nutrition || {};
+                document.getElementById('calories').textContent = nutrition.calories ? nutrition.calories + " kcal" : "Not available";
+                document.getElementById('protein').textContent  = nutrition.protein  ? nutrition.protein  + "g" : "Not available";
+                document.getElementById('carbs').textContent    = nutrition.carbohydrates ? nutrition.carbohydrates + "g" : "Not available";
+                document.getElementById('fats').textContent     = (nutrition.fats||nutrition.fat) ? (nutrition.fats||nutrition.fat) + "g" : "Not available";
+
+                // Serving-size dynamic update
                 nutritionBase = {
-                    calories: nutrition.calories ? Number(nutrition.calories) : 0,
-                    protein: nutrition.protein ? Number(nutrition.protein) : 0,
+                    calories: nutrition.calories  ? Number(nutrition.calories) : 0,
+                    protein:  nutrition.protein   ? Number(nutrition.protein)  : 0,
                     carbohydrates: nutrition.carbohydrates ? Number(nutrition.carbohydrates) : 0,
-                    fats: (nutrition.fats || nutrition.fat) ? Number(nutrition.fats || nutrition.fat) : 0
+                    fats: (nutrition.fats||nutrition.fat) ? Number(nutrition.fats||nutrition.fat) : 0
                 };
                 servingBase = 100;
                 servingInput = document.getElementById('serving-input');
                 if (nutrition.serving && /\d+/.test(nutrition.serving)) {
-                    let match = nutrition.serving.match(/(\d+)\s*g/);
-                    if (match) {
-                        servingBase = Number(match[1]);
-                        if (servingInput) servingInput.value = servingBase;
+                    let m = nutrition.serving.match(/(\d+)\s*g/);
+                    if (m) {
+                        servingBase = Number(m[1]);
+                        servingInput.value = servingBase;
                     }
                 } else {
-                    if (servingInput) servingInput.value = 100;
+                    servingInput.value = 100;
                 }
-        
-                // Fungsi update nutrisi
+
                 function updateNutritionDisplay() {
-                    let serving = Number(servingInput.value) || servingBase;
-                    let ratio = serving / servingBase;
-                    document.getElementById('calories').textContent = nutritionBase.calories ? (nutritionBase.calories * ratio).toFixed(1) + " kcal" : "-";
-                    document.getElementById('protein').textContent = nutritionBase.protein ? (nutritionBase.protein * ratio).toFixed(2) + "g" : "-";
-                    document.getElementById('carbs').textContent = nutritionBase.carbohydrates ? (nutritionBase.carbohydrates * ratio).toFixed(2) + "g" : "-";
-                    document.getElementById('fats').textContent = nutritionBase.fats ? (nutritionBase.fats * ratio).toFixed(2) + "g" : "-";
+                    let s = Number(servingInput.value) || servingBase;
+                    let ratio = s / servingBase;
+                    document.getElementById('calories').textContent = nutritionBase.calories ? (nutritionBase.calories * ratio).toFixed(1) + " kcal" : "Not available";
+                    document.getElementById('protein').textContent  = nutritionBase.protein  ? (nutritionBase.protein  * ratio).toFixed(2) + "g" : "Not available";
+                    document.getElementById('carbs').textContent    = nutritionBase.carbohydrates ? (nutritionBase.carbohydrates * ratio).toFixed(2) + "g" : "Not available";
+                    document.getElementById('fats').textContent     = nutritionBase.fats ? (nutritionBase.fats * ratio).toFixed(2) + "g" : "Not available";
                 }
-        
-                // Tambahkan listener hanya sekali
-                servingInput.removeEventListener('input', updateNutritionDisplay); // clean jika sudah ada
+                servingInput.removeEventListener('input', updateNutritionDisplay);
                 servingInput.addEventListener('input', updateNutritionDisplay);
-                // Panggil update pertama kali
                 updateNutritionDisplay();
-        
-                // Menyisipkan URL untuk 'More Details'
-                // Update the More Details link to the actual FatSecret URL
-                const foodUrl = bestDetection.food_url || '';  // Ensure API returns a valid URL
-                const foodLink = document.getElementById('food-details-link');
-                foodLink.href = foodUrl;  // Set the href to the correct food URL
 
-                console.log("Food URL:", foodUrl);  // Log the URL to check its correctness
-                
-                if (foodUrl) {
-                    const foodLink = document.getElementById('food-details-link');
-                    foodLink.href = foodUrl;
+                // More details link
+                const foodLink = document.getElementById('food-details-link');
+                if (nutrition.food_url) {
+                    foodLink.href = nutrition.food_url;
+                    foodLink.style.display = 'inline';
                 } else {
-                    console.log("No food URL received!");
+                    foodLink.style.display = 'none';
                 }
 
-
-        
                 // Tips
-                const tips = bestDetection.tips || [];
-                document.querySelector('.tips-list').innerHTML = tips.map(tip => `
-                    <li><i class="fas fa-leaf"></i><span>${tip}</span></li>
-                `).join('');
-        
+                const tipsEl = document.querySelector('.tips-list');
+                tipsEl.innerHTML = (best.tips||[]).map(tip =>
+                    `<li><i class="fas fa-leaf"></i><span>${tip}</span></li>`
+                ).join('');
+
                 resultsSection.classList.add('active');
                 cameraContainer.classList.remove('active');
                 uploadContainer.classList.remove('active');
                 cameraControls.style.display = 'none';
-                capturedBlob = null;
             } catch (error) {
                 alert("Error analyzing food: " + error.message);
             }
         }
-        
-        newScanBtn?.addEventListener('click', function() {
-            resetToInitialState();
-        });
     });
     </script>
 </body>

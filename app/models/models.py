@@ -38,6 +38,17 @@ if not os.path.exists(os.path.join(BASE_DIR, model_filename_v8s_finetuned)):
 yolo_model_v8s_pretrained = YOLO(os.path.join(BASE_DIR, model_filename_v8s_pretrained))
 yolo_model_v8s_finetuned = YOLO(os.path.join(BASE_DIR, model_filename_v8s_finetuned))
 
+# List of classes to exclude (Vietnamese food categories)
+excluded_classes = [
+    "Banh_mi", "Banh_trang_tron", "Banh_xeo", "Bun_bo_Hue", "Bun_dau", "Com_tam",
+    "Goi_cuon", "Pho", "Hu_tieu", "Xoi"
+]
+
+def filter_detections(detections):
+    # Filter detections to exclude unwanted classes
+    return [d for d in detections if d["label"] not in excluded_classes]
+
+
 def detect_food_labels(image_path: str) -> List[Dict]:
     detections = []
     model_used = "None"
@@ -102,5 +113,8 @@ def detect_food_labels(image_path: str) -> List[Dict]:
                     "confidence": confidence,
                     "model": "YOLOv8s Fine-tuned",  # Menambahkan informasi model yang digunakan
                 })
+
+    # Apply filter to remove unwanted detections
+    detections = filter_detections(detections)
 
     return detections

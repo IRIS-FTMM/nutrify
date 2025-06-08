@@ -60,6 +60,7 @@ def search_calorie(food_name: str):
                 nutrition = parse_nutrition(desc)
                 nutrition["food_name"] = food.get('food_name', food_name)
                 nutrition["serving"] = serving
+                nutrition["food_url"] = food.get('food_url', '')
                 return nutrition
 
         # Jika tidak ada yang "100 g", fallback ke yang pertama
@@ -69,6 +70,7 @@ def search_calorie(food_name: str):
         nutrition = parse_nutrition(desc)
         nutrition["food_name"] = food.get('food_name', food_name)
         nutrition["serving"] = serving
+        nutrition["food_url"] = food.get('food_url', '')
         return nutrition
 
     except Exception as e:

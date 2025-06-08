@@ -38,7 +38,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "..", "templates"))
 
 # Mount static folder pointing ke templates/assets agar css bisa diakses
-app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "..", "templates", "assets")), name="static")
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "..", "static")), name="static")
 
 # Load model functions (commented out YOLO, using Roboflow now)
 # model = YOLO(os.path.join(BASE_DIR, "models", "best.pt"))
@@ -95,8 +95,6 @@ async def information(request: Request):
         "food_list": food_list
     })
 
-
-    
 @app.post("/detect-food/")
 async def detect_food(file: UploadFile = File(...)):
     upload_folder = os.path.join(BASE_DIR, "..", "temp")
