@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from app.utils.roboflow import detect_food_labels
+from app.models.models import detect_food_labels
 from app.utils.fatsecret_clients import search_calorie
 from app.utils.openrouter_client import get_ai_eating_tips, extract_tips_from_ai_response, clean_markdown
 from pydantic import BaseModel
@@ -61,17 +61,40 @@ async def calculate_calorie(request: Request):
 
 @app.get("/information", response_class=HTMLResponse)
 async def information(request: Request):
-    # Replace this section with your new system or leave it empty if you're not using this route for now
-    entries = [
-        {"label": "Nasi Goreng", "calories": 250},
-        {"label": "Ayam Bakar", "calories": 180},
-        {"label": "Jus Alpukat", "calories": 160},
-        # Add other food items with calories as needed
+    # Daftar nama makanan dari ketiga model (YOLOv8, Roboflow, best.pt)
+    food_list = [
+        # Daftar dari YOLOv8
+        "Pizza", "Burger", "Sushi", "Nasi Goreng", "Ayam Bakar", "Rendang", "Bakso", "Kentang Goreng", "Donat", "Muffin",
+        "Puding", "Tempe Goreng", "Sate", "Tahu Goreng", "Telur Dadar", "Sayur Sop", "Tumis Kangkung",
+
+        # Daftar dari Roboflow
+        "Ayam Bakar", "Ayam Goreng", "Bakso", "Capcay", "Donat", "Ikan Bakar", "Ikan Goreng", "Kentang Goreng", "Kentang Rebus",
+        "Nasi Putih", "Puding", "Rendang", "Roti Tawar", "Sate", "Sayur Sop", "Tahu Goreng", "Telur Ceplok", "Telur Dadar",
+        "Telur Rebus", "Tempe Goreng", "Tumis Kangkung",
+
+        # Daftar dari best.pt
+        "Rice", "Eels on Rice", "Pilaf", "Chicken-'n'-Egg on Rice", "Pork Cutlet on Rice", "Beef Curry", "Sushi", "Chicken Rice",
+        "Fried Rice", "Tempura Bowl", "Bibimbap", "Toast", "Croissant", "Roll Bread", "Raisin Bread", "Chip Butty", "Hamburger",
+        "Pizza", "Sandwiches", "Udon Noodle", "Tempura Udon", "Soba Noodle", "Ramen Noodle", "Beef Noodle", "Tensin Noodle",
+        "Fried Noodle", "Spaghetti", "Japanese-style Pancake", "Takoyaki", "Gratin", "Sauteed Vegetables", "Croquette", "Grilled Eggplant",
+        "Sauteed Spinach", "Vegetable Tempura", "Miso Soup", "Potage", "Sausage", "Oden", "Omelet", "Ganmodoki", "Jiaozi", "Stew",
+        "Teriyaki Grilled Fish", "Fried Fish", "Grilled Salmon", "Salmon Meuniere", "Sashimi", "Grilled Pacific Saury", "Sukiyaki",
+        "Sweet and Sour Pork", "Lightly Roasted Fish", "Steamed Egg Hotchpotch", "Tempura", "Fried Chicken", "Sirloin Cutlet",
+        "Nanbanzuke", "Boiled Fish", "Seasoned Beef with Potatoes", "Hamburg Steak", "Beef Steak", "Dried Fish", "Ginger Pork Saute",
+        "Spicy Chili-flavored Tofu", "Yakitori", "Cabbage Roll", "Rolled Omelet", "Egg Sunny-side Up", "Fermented Soybeans", "Cold Tofu",
+        "Egg Roll", "Chilled Noodle", "Stir-fried Beef and Peppers", "Simmered Pork", "Boiled Chicken and Vegetables", "Sashimi Bowl",
+        "Sushi Bowl", "Fish-shaped Pancake with Bean Jam", "Shrimp with Chili Sauce", "Roast Chicken", "Steamed Meat Dumpling",
+        "Omelet with Fried Rice", "Cutlet Curry", "Spaghetti Meat Sauce", "Fried Shrimp", "Potato Salad", "Green Salad", "Macaroni Salad",
+        "Japanese Tofu and Vegetable Chowder", "Pork Miso Soup", "Chinese Soup", "Beef Bowl", "Kinpira-style Sauteed Burdock", "Rice Ball",
+        "Pizza Toast", "Dipping Noodles", "Hot Dog", "French Fries", "Mixed Rice", "Goya Chanpuru"
     ]
+
+    # Mengirim data ke template untuk menampilkan search engine
     return templates.TemplateResponse("information.html", {
         "request": request,
-        "entries": entries
+        "food_list": food_list
     })
+
 
     
 @app.post("/detect-food/")
@@ -83,18 +106,17 @@ async def detect_food(file: UploadFile = File(...)):
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    # Call the detect_food_labels function to handle both Roboflow and YOLO detection
+    # Panggil fungsi untuk mendeteksi label makanan dan model yang digunakan
     detections = detect_food_labels(file_path)
 
     results = []
     for det in detections:
         label = det["label"]
         confidence = det["confidence"]
-        
-        # 1. Get nutrition from FatSecret
+        model = det["model"]  # Menyimpan model yang digunakan
         nutrition = search_calorie(label)
 
-        # 2. Get AI tips
+        # Mendapatkan tips AI
         tips_list = []
         if nutrition:
             ai_response = get_ai_eating_tips(label, nutrition)
@@ -104,12 +126,14 @@ async def detect_food(file: UploadFile = File(...)):
         results.append({
             "label": label,
             "confidence": confidence,
+            "model": model,  # Menyertakan model dalam hasil
             "nutrition": nutrition,
             "tips": tips_list
         })
 
     os.remove(file_path)
     return {"detections": results}
+
 
 @app.post("/generate-calorie-tips/")
 async def generate_calorie_tips(req: CalorieRequest):

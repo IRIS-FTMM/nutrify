@@ -1,36 +1,31 @@
-.env
-env/
-venv/
-.venv/
-__pycache__/
+# Python
 *.pyc
 *.pyo
 *.pyd
+__pycache__/
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# Logs and temporary files
 *.log
 *.tmp
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# Model and dataset files
 *.pt
 *.h5
 *.ckpt
 *.sqlite3
 *.db
+
+# IDE settings
 .vscode/
 .idea/
-data
-train-v0.4
-val-v0.4
-test_images-v0.4
-train/ 
-val/
-templates/assets/images
-UECFOOD100/
-balanced.csv
-new_data/
-data_info.csv
-data9.yaml
-dataset109.yaml
-multiple_data.csv
-filtered_food_dataset.csv
-test_data.csv
-train_data.csv
-val_data.csv
-filtered_food_data_train.xlsx
+
+# Environment variables
+.env

@@ -120,7 +120,13 @@
                                 <input id="serving-input" type="number" min="1" max="9999" value="100" style="width:60px; border-radius:8px; border:1.5px solid #ddd; padding:2px 6px; font-size:1rem; text-align:right; margin-right:5px;">
                                 <span style="margin-left:2px;">g</span>
                             </td>
-                        </tr>                        
+                        </tr>    
+                        <tr>
+                            <td>More Details</td>
+                            <td>
+                                <a id="food-details-link" href="#" target="_blank" style="color: #4facfe;">Click here for more details</a>
+                            </td>
+                        </tr>                    
                         </table>
                     </div>                      
                 </div>
@@ -287,7 +293,7 @@
         async function analyzeFood() {
             let file = null;
             let formData = new FormData();
-    
+        
             if (capturedBlob) {
                 file = new File([capturedBlob], "capture.jpg", { type: "image/jpeg" });
                 formData.append("file", file);
@@ -298,37 +304,36 @@
                 alert("Please upload or capture an image.");
                 return;
             }
-    
+        
             document.getElementById('food-name').textContent = "Analyzing...";
             document.getElementById('food-description').textContent = "Please wait...";
-    
+        
             try {
                 const response = await fetch("http://localhost:8000/detect-food/", {
                     method: "POST",
                     body: formData
                 });
-    
+        
                 if (!response.ok) throw new Error("API error");
-    
+        
                 const data = await response.json();
                 if (!data.detections || data.detections.length === 0) {
                     alert("No food detected.");
                     resultImage.src = "https://via.placeholder.com/400x400";
                     return;
                 }
-    
+        
                 const bestDetection = data.detections[0];
-    
+        
                 document.getElementById("food-name").textContent = bestDetection.label;
                 document.getElementById("food-description").textContent = `Confidence: ${(bestDetection.confidence * 100).toFixed(1)}%`;
-    
+        
                 const nutrition = bestDetection.nutrition;
-                // Cek jika tidak ditemukan data
                 document.getElementById('calories').textContent = nutrition.calories ? nutrition.calories + " kcal" : "-";
                 document.getElementById('protein').textContent = nutrition.protein ? nutrition.protein + "g" : "-";
                 document.getElementById('carbs').textContent = nutrition.carbohydrates ? nutrition.carbohydrates + "g" : "-";
                 document.getElementById('fats').textContent = (nutrition.fats || nutrition.fat) ? (nutrition.fats || nutrition.fat) + "g" : "-";
-    
+        
                 // ==== SERVING SIZE DYNAMIC ====
                 nutritionBase = {
                     calories: nutrition.calories ? Number(nutrition.calories) : 0,
@@ -347,7 +352,7 @@
                 } else {
                     if (servingInput) servingInput.value = 100;
                 }
-    
+        
                 // Fungsi update nutrisi
                 function updateNutritionDisplay() {
                     let serving = Number(servingInput.value) || servingBase;
@@ -357,19 +362,36 @@
                     document.getElementById('carbs').textContent = nutritionBase.carbohydrates ? (nutritionBase.carbohydrates * ratio).toFixed(2) + "g" : "-";
                     document.getElementById('fats').textContent = nutritionBase.fats ? (nutritionBase.fats * ratio).toFixed(2) + "g" : "-";
                 }
-    
+        
                 // Tambahkan listener hanya sekali
                 servingInput.removeEventListener('input', updateNutritionDisplay); // clean jika sudah ada
                 servingInput.addEventListener('input', updateNutritionDisplay);
                 // Panggil update pertama kali
                 updateNutritionDisplay();
-    
+        
+                // Menyisipkan URL untuk 'More Details'
+                // Update the More Details link to the actual FatSecret URL
+                const foodUrl = bestDetection.food_url || '';  // Ensure API returns a valid URL
+                const foodLink = document.getElementById('food-details-link');
+                foodLink.href = foodUrl;  // Set the href to the correct food URL
+
+                console.log("Food URL:", foodUrl);  // Log the URL to check its correctness
+                
+                if (foodUrl) {
+                    const foodLink = document.getElementById('food-details-link');
+                    foodLink.href = foodUrl;
+                } else {
+                    console.log("No food URL received!");
+                }
+
+
+        
                 // Tips
                 const tips = bestDetection.tips || [];
                 document.querySelector('.tips-list').innerHTML = tips.map(tip => `
                     <li><i class="fas fa-leaf"></i><span>${tip}</span></li>
                 `).join('');
-    
+        
                 resultsSection.classList.add('active');
                 cameraContainer.classList.remove('active');
                 uploadContainer.classList.remove('active');
@@ -379,11 +401,11 @@
                 alert("Error analyzing food: " + error.message);
             }
         }
-    
+        
         newScanBtn?.addEventListener('click', function() {
             resetToInitialState();
         });
     });
-    </script>                   
+    </script>
 </body>
 </html>

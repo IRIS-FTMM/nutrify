@@ -16,3 +16,4 @@ requests
 openrouter
 openpyxl
 inference_sdk
+gdown

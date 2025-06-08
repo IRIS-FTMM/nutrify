@@ -37,6 +37,7 @@ def parse_nutrition(description: str):
 def search_calorie(food_name: str):
     try:
         foods = fs.foods_search(food_name)
+        print(f"FatSecret API response: {foods}")  # Log respons dari API
         if isinstance(foods, list):
             foods_data = foods
         elif isinstance(foods, dict):
