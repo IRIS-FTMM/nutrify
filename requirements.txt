@@ -6,8 +6,6 @@ jinja2
 python-dotenv
 fatsecret
 rauth
-torch
-torchvision
 ultralytics
 python-multipart
 requests
