@@ -1,7 +1,6 @@
 fastapi
 uvicorn
 opencv-python
-numpy
 pillow
 jinja2
 python-dotenv
@@ -11,9 +10,7 @@ torch
 torchvision
 ultralytics
 python-multipart
-wandb
 requests
 openrouter
-openpyxl
 inference_sdk
 gdown
