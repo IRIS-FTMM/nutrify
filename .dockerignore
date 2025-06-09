@@ -7,3 +7,8 @@ __pycache__
 .env
 *.git
 *.vscode
+.git
+.env
+node_modules
+*.log
+*.tmp
