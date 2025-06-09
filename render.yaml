@@ -3,16 +3,13 @@ services:
     name: calorie-cam
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 80
-    plan: free
-    branches:
-      - main
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: FATSECRET_CONSUMER_KEY
-        value: your_fatsecret_consumer_key
+        value: $FATSECRET_CONSUMER_KEY
       - key: FATSECRET_CONSUMER_SECRET
-        value: your_fatsecret_consumer_secret
+        value: $FATSECRET_CONSUMER_SECRET
       - key: OPENROUTER_API_KEY
-        value: your_openrouter_api_key
+        value: $OPENROUTER_API_KEY
       - key: ROBOFLOW_MODEL_API_KEY
-        value: your_roboflow_model_api_key
+        value: $ROBOFLOW_MODEL_API_KEY
