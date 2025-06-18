@@ -142,5 +142,3 @@ Terdapat 3 versi implementasi:
 ---
 
 **Dibuat untuk Final Project Machine Learning.**
-
-```
