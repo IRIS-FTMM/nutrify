@@ -13,12 +13,12 @@ function Footer() {
                 React.createElement("span", { className: "text-xl font-bold" }, "Nutrify")
             ),
             React.createElement("p", { className: "text-gray-400 my-6 max-w-xl mx-auto" },
-                "Nutrify adalah platform deteksi makanan berbasis YOLOv8 untuk membantu masyarakat mengenali makanan dan memahami gizi sehari-hari."
+                "Nutrify adalah platform deteksi makanan berbasis YOLO untuk membantu masyarakat mengenali makanan dan memahami gizi sehari-hari."
             ),
             React.createElement(
                 "div",
                 { className: "flex space-x-4 justify-center mb-6" },
-                React.createElement("a", { href: "https://github.com/arknsa/calorie-cam", target: "_blank", rel: "noopener" },
+                React.createElement("a", { href: "https://github.com/arknsa/nutrify", target: "_blank", rel: "noopener" },
                     React.createElement("i", { "data-lucide": "github", className: "w-6 h-6 text-gray-400 hover:text-blue-400" })
                 )
             ),

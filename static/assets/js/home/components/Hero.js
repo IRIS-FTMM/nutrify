@@ -25,7 +25,7 @@ function Hero() {
                         ]),
                         React.createElement("p", { className: "text-xl mb-8 text-gray-200" },
                             "Sistem deteksi makanan otomatis berbasis ",
-                            React.createElement("b", null, "YOLOv8"),
+                            React.createElement("b", null, "YOLO"),
                             " untuk analisis nutrisi, estimasi kalori, dan rekomendasi pola makan sehat."
                         ),
                         React.createElement(
@@ -59,7 +59,7 @@ function Hero() {
                                     "div",
                                     { className: "flex items-center space-x-2" },
                                     React.createElement("i", { "data-lucide": "zap", className: "w-6 h-6 text-green-500" }),
-                                    React.createElement("span", { className: "text-gray-800 font-semibold" }, "Berbasis YOLOv8")
+                                    React.createElement("span", { className: "text-gray-800 font-semibold" }, "Berbasis YOLO")
                                 )
                             )
                         )

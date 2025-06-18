@@ -15,7 +15,7 @@ def get_ai_eating_tips(food_label: str, nutrition: dict) -> str:
         f"Kalori: {nutrition.get('calories', '-')}, "
         f"Protein: {nutrition.get('protein', '-')}, "
         f"Karbohidrat: {nutrition.get('carbohydrates', '-')}, "
-        f"Lemak: {nutrition.get('fat', '-')}"
+        f"Lemak: {nutrition.get('fat', '-')} "
     )
     
     # Siapkan prompt untuk OpenRouter
@@ -118,3 +118,66 @@ def get_calorie_tips(gender, age, height, weight, activity, goal) -> list:
         return tips[:3]
     
     return ["Tips tidak tersedia saat ini."]
+
+
+# --- FUNGSI BARU UNTUK REKOMENDASI HIDANGAN ---
+def get_recommendations_for_meal(food_names: list, total_nutrition: dict) -> list:
+    """
+    Mengambil 3 tips kesehatan dari Gemini berdasarkan total nutrisi dari beberapa makanan (satu hidangan).
+    """
+    # Jangan panggil AI jika tidak ada makanan terdeteksi
+    if not food_names:
+        return []
+
+    # Gabungkan nama-nama makanan menjadi satu string yang mudah dibaca
+    if len(food_names) > 1:
+        # Contoh: ["Nasi", "Ayam", "Tahu"] -> "Nasi, Ayam, dan Tahu"
+        food_list_str = ", ".join(food_names[:-1]) + f", dan {food_names[-1]}"
+    else:
+        food_list_str = food_names[0]
+
+    # Siapkan string nutrisi total yang rapi
+    nut_str = (
+        f"Kalori: {total_nutrition.get('calories', 0):.0f} kkal, "
+        f"Protein: {total_nutrition.get('protein', 0):.1f}g, "
+        f"Karbohidrat: {total_nutrition.get('carbohydrates', 0):.1f}g, "
+        f"Lemak: {total_nutrition.get('fat', 0):.1f}g"
+    )
+
+    # Siapkan prompt yang lebih kontekstual untuk Gemini
+    prompt = (
+        f"Saya baru saja makan sebuah hidangan yang terdiri dari: {food_list_str}. "
+        f"Estimasi total nutrisi dari hidangan ini adalah: {nut_str}.\n\n"
+        "Berdasarkan informasi ini, berikan 3 tips kesehatan praktis dan singkat terkait kombinasi makanan ini. "
+        "Fokus pada saran yang membangun dan positif, bukan yang melarang.\n"
+        "Format jawaban langsung sebagai 3 poin menggunakan bullet •. Tanpa judul, pembuka, atau penutup."
+    )
+
+    data = {
+        "model": "google/gemini-flash-1.5", # Model cepat, gratis, dan bagus untuk ini
+        "messages": [
+            {"role": "system", "content": "Anda adalah ahli gizi yang memberikan saran praktis, positif, dan singkat dalam bahasa Indonesia."},
+            {"role": "user", "content": prompt}
+        ]
+    }
+
+    try:
+        response = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}"},
+            json=data,
+            timeout=25 # Batas waktu request agar server tidak hang
+        )
+
+        if response.status_code == 200:
+            content = response.json()["choices"][0]["message"]["content"]
+            # Bersihkan response dan pisahkan menjadi list berdasarkan bullet
+            tips = [line.strip() for line in content.strip().split("•") if line.strip()]
+            return tips[:3] # Ambil 3 tips teratas
+        else:
+            print(f"AI Error: {response.status_code} - {response.text}")
+            return ["Gagal mendapatkan rekomendasi AI saat ini."]
+            
+    except requests.exceptions.RequestException as e:
+        print(f"AI Request Error: {e}")
+        return ["Tidak dapat terhubung ke layanan AI saat ini."]

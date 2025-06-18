@@ -5,20 +5,26 @@ import cv2
 import numpy as np
 from io import BytesIO
 from typing import List, Dict
+from dotenv import load_dotenv
 
-# Initialize the Roboflow client globally (outside any function)
+# Load environment variables
+load_dotenv()
+roboflow_key = os.getenv("ROBOFLOW_API_KEY")  # Correct way to get the API key
+
+# Initialize the Roboflow client globally
 client = InferenceHTTPClient(
     api_url="https://serverless.roboflow.com",
-    api_key="W5MsQQZpv9FnaiGX3hG7"  # Replace with your actual API key
+    api_key=roboflow_key  # Use the correct API key
 )
 
-def detect_food_labels_from_image(image_path: str, confidence_threshold: float = 0.65) -> List[Dict]:
+
+def detect_food_labels_from_image(image_path: str, confidence_threshold: float = 0.50) -> List[Dict]:
     detections = []
     
     # Run detection on the uploaded image using Roboflow
     result = client.run_workflow(
-        workspace_name="machinelearning-4tyun",
-        workflow_id="detect-and-classify-4",
+        workspace_name="nutrify",
+        workflow_id="detect-and-classify",
         images={"image": image_path},
         use_cache=True
     )

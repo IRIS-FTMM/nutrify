@@ -11,6 +11,8 @@ function App() {
             React.createElement(Header, null),
             React.createElement(Hero, null),
             React.createElement(AboutSection, null),
+            React.createElement(FeaturesSection, null),  // Tambahkan fitur
+            React.createElement(HowItWorksSection, null),  // Tambahkan cara kerja
             React.createElement(CalorieCalculatorTeaser, null),
             React.createElement(FoodsListTeaser, null),
             React.createElement(Footer, null),
@@ -22,4 +24,6 @@ function App() {
     }
 }
 
-ReactDOM.render(React.createElement(App), document.getElementById('root'));
+// Render App saja, bukan komponen individual
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(React.createElement(App));

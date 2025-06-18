@@ -1,42 +1,68 @@
+# routes/detection.py
+
+import os
+import cv2
+import base64
+import numpy as np
 from fastapi import APIRouter, UploadFile, File, HTTPException
-from app.models.models import detect_food_labels_from_image, detect_food_labels_from_video
-from app.utils.fatsecret_clients import search_calorie
 from typing import List
+
+# Pastikan path import ini sesuai dengan struktur folder Anda
+# Jika models.py ada di folder app/models/, maka path ini sudah benar
+from app.models.models import detect_food_labels_from_image, draw_bounding_boxes
+from app.utils.fatsecret_clients import search_calorie # Kita tetap import
 
 router = APIRouter(prefix="/detect", tags=["detection"])
 
 @router.post("/image/")
-async def detect_calories_from_image(file: UploadFile = File(...)):
+async def detect_food_from_image_endpoint(file: UploadFile = File(...)):
+    # Membuat direktori 'temp' jika belum ada
+    if not os.path.exists("temp"):
+        os.makedirs("temp")
+        
+    image_path = f"temp/{file.filename}"
+
     try:
-        # Simpan sementara gambar yang diupload
-        contents = await file.read()
-        image_path = f"temp/{file.filename}"
+        # Menyimpan file yang diunggah ke path sementara
         with open(image_path, "wb") as f:
+            contents = await file.read()
             f.write(contents)
 
-        # Panggil model deteksi makanan pada gambar
+        # 1. Panggil model untuk mendapatkan data deteksi (label, confidence, box)
         detections = detect_food_labels_from_image(image_path)
 
-        results = []
-        for det in detections:
-            label = det["label"]
-            confidence = det["confidence"]
-            model = det["model"]  # Menyimpan model yang digunakan
-            nutrition_info = search_calorie(label)
-            results.append({"food": label, "confidence": confidence, "model": model, "nutrition": nutrition_info})
+        # Jika model tidak mendeteksi apa pun, kirim error yang jelas
+        if not detections:
+            raise HTTPException(status_code=404, detail="Tidak ada makanan yang terdeteksi")
 
-        # Hapus gambar sementara setelah diproses
-        os.remove(image_path)
-        return {"detected_foods": results}
+        # 2. Gambar bounding box pada gambar menggunakan data deteksi
+        annotated_image_np = draw_bounding_boxes(image_path, detections)
+
+        # 3. Ubah gambar yang sudah digambar menjadi string Base64
+        _, buffer = cv2.imencode('.jpg', annotated_image_np)
+        image_base64 = base64.b64encode(buffer).decode('utf-8')
+        
+        # 4. Ambil informasi nutrisi untuk setiap item yang terdeteksi
+        # (Sesuai permintaan, kita kesampingkan dulu. Tapi ini adalah tempat yang benar untuk meletakkannya)
+        # for det in detections:
+        #     det['nutrition'] = search_calorie(det['label'])
+            
+        # 5. Siapkan struktur JSON final untuk dikirim ke frontend
+        final_response = {
+            "image_with_boxes": f"data:image/jpeg;base64,{image_base64}",
+            "detections": detections
+        }
+
+        return final_response
+
+    except Exception as e:
+        # Tangkap error spesifik dari atas dan error umum lainnya
+        if isinstance(e, HTTPException):
+            raise e
+        print(f"Error internal: {e}") # Log error untuk debugging di server
+        raise HTTPException(status_code=500, detail=f"Terjadi kesalahan saat memproses gambar: {str(e)}")
     
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error detecting food: {str(e)}")
-
-@router.post("/video/")
-async def detect_calories_from_video():
-    try:
-        # Memulai deteksi makanan dari video (kamera langsung)
-        detections = detect_food_labels_from_video(video_source=0)
-        return {"status": "Detection running on video", "message": "Press 'q' to stop the detection"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error detecting food from video: {e}")
+    finally:
+        # Pastikan file sementara selalu dihapus
+        if os.path.exists(image_path):
+            os.remove(image_path)

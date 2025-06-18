@@ -1,6 +1,6 @@
 # 🍽️ Indonesian Combination Food Detection
 
-Deteksi otomatis berbagai makanan-minuman khas Indonesia menggunakan model YOLOv8, dilatih dengan dataset kolaborasi di Roboflow.
+Deteksi otomatis berbagai makanan-minuman khas Indonesia menggunakan model YOLO, dilatih dengan dataset kolaborasi di Roboflow.
 Cocok untuk aplikasi food recognition, edukasi gizi, serta tracking konsumsi harian berbasis AI.
 
 ---
@@ -45,7 +45,7 @@ Cocok untuk aplikasi food recognition, edukasi gizi, serta tracking konsumsi har
    pip install -r requirements.txt
    ```
 
-4. **Download Model YOLOv8s**
+4. **Download Model YOLO**
 
    * Download pretrained weights dari [Roboflow Universe](https://universe.roboflow.com/machinelearning-4tyun/indonesian-combination-food).
    * Letakkan file model (misal: `yolov8s.pt`) di folder `app/models/`.
@@ -125,7 +125,7 @@ Terdiri dari berbagai makanan/minuman Indonesia: nasi putih, ayam goreng, mie go
 nutrify/
 ├── app/
 │   ├── main.py
-│   ├── models/          # Tempat file model YOLOv8 disimpan
+│   ├── models/          # Tempat file model YOLO disimpan
 │   ├── routers/
 │   └── utils/
 ├── env/                 # Virtual environment (opsional, ignore di git)

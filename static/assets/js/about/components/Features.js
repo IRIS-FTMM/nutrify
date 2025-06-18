@@ -1,9 +1,9 @@
 function Features() {
     var features = [
-        { icon: "camera", title: "Deteksi Otomatis", desc: "Mengenali makanan dan minuman langsung dari kamera maupun galeri." },
-        { icon: "database", title: "Database Nutrisi Lengkap", desc: "Data kalori, karbohidrat, protein, lemak, dan gula dari Fatsecret." },
-        { icon: "sparkles", title: "Rekomendasi AI", desc: "Gemini AI memberikan tips dan edukasi pola makan sehat." },
-        { icon: "zap", title: "Dibangun dengan Roboflow", desc: "Mulai dari anotasi, training, hingga deployment model YOLOv8." }
+        { icon: "camera", title: "Deteksi dengan Kamera", desc: "Identifikasi makanan & kalori secara instan via kamera." },
+        { icon: "image", title: "Deteksi dengan Gambar", desc: "Upload gambar makanan untuk analisis nutrisi otomatis." },
+        { icon: "activity", title: "Kalkulator Kalori", desc: "Hitung kebutuhan kalori harian dengan mudah." },
+        { icon: "sparkles", title: "Rekomendasi AI", desc: "Gemini AI memberi tips makan sehat & edukasi gizi langsung dari AI terbaru." }
     ];
     return React.createElement(
         "section",

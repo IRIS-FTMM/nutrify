@@ -3,7 +3,7 @@ function TeamSection() {
         { name: "Arkan Syafiq At'taqy", nim: "164221062", role: "AI & Fullstack", photo: "/static/images/About-Us/Arkan.jpg" },
         { name: "Shiba Salsabilla", nim: "164221078", role: "Frontend", photo: "/static/images/About-Us/Shiba.jpg" },
         { name: "Nazhifah Firyal Jasmine", nim: "164221083", role: "UI/UX & Data", photo: "/static/images/About-Us/Jasmine.jpg" },
-        { name: "Ramadhan Eko Saputra", nim: "164221088", role: "Deployment", photo: "https://randomuser.me/api/portraits/men/22.jpg" }
+        { name: "Ramadhan Eko Saputra", nim: "164221088", role: "Deployment", photo: "/static/images/About-Us/Adhan.JPG" }
     ];
     return React.createElement(
         "section", { className: "py-16 bg-blue-50" },

@@ -1,7 +1,7 @@
 function AboutSection() {
     return React.createElement(
         "section",
-        { id: "about", className: "py-20 bg-gray-50" },
+        { id: "about", className: "py-10 bg-gray-50" },
         React.createElement(
             "div",
             { className: "container mx-auto px-6 max-w-4xl" },
@@ -15,7 +15,7 @@ function AboutSection() {
             React.createElement(
                 "p",
                 { className: "text-lg text-gray-600 mb-4 text-center" },
-                "Nutrify adalah sistem deteksi makanan berbasis YOLOv8 yang memudahkan pelacakan gizi, menghitung kalori makanan secara otomatis, dan membantu edukasi pola makan sehat."
+                "Nutrify adalah sistem deteksi makanan berbasis YOLO yang memudahkan pelacakan gizi, menghitung kalori makanan secara otomatis, dan membantu edukasi pola makan sehat."
             ),
 
             // Credit Section
@@ -49,7 +49,7 @@ function AboutSection() {
                 React.createElement(
                     "div",
                     { className: "text-center" },
-                    React.createElement("div", { className: "text-3xl font-bold text-blue-600 mb-2" }, "YOLOv8"),
+                    React.createElement("div", { className: "text-3xl font-bold text-blue-600 mb-2" }, "YOLO"),
                     React.createElement("div", { className: "text-gray-600" }, "Model Deteksi Makanan")
                 ),
                 React.createElement(
@@ -60,69 +60,69 @@ function AboutSection() {
                 )
             ),
 
-            // Fitur Utama
-            React.createElement(
-                "div",
-                { className: "mb-12" },
-                React.createElement(
-                    "h3",
-                    { className: "text-2xl font-bold text-gray-800 mb-6 text-center" },
-                    "Fitur Utama"
-                ),
-                React.createElement(
-                    "div",
-                    { className: "grid grid-cols-2 md:grid-cols-2 gap-6" },
-                    [
-                        { icon: "camera", title: "Deteksi dengan Kamera", desc: "Identifikasi makanan & kalori secara instan via kamera." },
-                        { icon: "image", title: "Deteksi dengan Gambar", desc: "Upload gambar makanan untuk analisis nutrisi otomatis." },
-                        { icon: "activity", title: "Kalkulator Kalori", desc: "Hitung kebutuhan kalori harian dengan mudah." },
-                        { icon: "sparkles", title: "Rekomendasi AI", desc: "Gemini AI memberi tips makan sehat & edukasi gizi langsung dari AI terbaru." }
-                    ].map(function(feat, i) {
-                        return React.createElement(
-                            "div",
-                            { className: "flex flex-col items-center bg-white p-6 rounded-lg shadow hover:shadow-lg transition-all", key: i },
-                            React.createElement("div", { className: "w-12 h-12 flex items-center justify-center bg-blue-100 rounded-lg mb-3" },
-                                React.createElement("i", { "data-lucide": feat.icon, className: "w-6 h-6 text-blue-600" })
-                            ),
-                            React.createElement("h4", { className: "text-lg font-semibold text-gray-800 mb-1 text-center" }, feat.title),
-                            React.createElement("p", { className: "text-gray-600 text-sm text-center" }, feat.desc)
-                        );
-                    })
-                )
-            ),
+            // // Fitur Utama (ganti sesuai permintaan)
+            // React.createElement(
+            //     "div",
+            //     { className: "mb-12" },
+            //     React.createElement(
+            //         "h3",
+            //         { className: "text-2xl font-bold text-gray-800 mb-6 text-center" },
+            //         "Fitur Utama Nutrify"
+            //     ),
+            //     React.createElement(
+            //         "div",
+            //         { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" },
+            //         [
+            //             { icon: "camera", title: "Deteksi dengan Kamera", desc: "Mengenali makanan dan minuman langsung dari kamera maupun galeri." },
+            //             { icon: "image", title: "Deteksi dengan Gambar", desc: "Data kalori, karbohidrat, protein, lemak, dan gula dari Fatsecret." },
+            //             { icon: "activity", title: "Kalkulator Kalori", desc: "Hitung kebutuhan kalori harian dengan"},
+            //             { icon: "sparkles", title: "Rekomendasi AI", desc: "Gemini AI memberi tips makan sehat & edukasi gizi langsung dari AI terbaru/" }
+            //         ].map(function (feat, i) {
+            //             return React.createElement(
+            //                 "div",
+            //                 { className: "bg-white rounded-lg shadow p-8 flex flex-col items-center text-center fade-in", key: i },
+            //                 React.createElement("div", { className: "w-14 h-14 flex items-center justify-center bg-blue-100 rounded-full mb-4" },
+            //                     React.createElement("i", { "data-lucide": feat.icon, className: "w-7 h-7 text-blue-600" })
+            //                 ),
+            //                 React.createElement("h3", { className: "font-semibold text-lg text-gray-800 mb-2" }, feat.title),
+            //                 React.createElement("p", { className: "text-gray-600 text-sm" }, feat.desc)
+            //             );
+            //         })
+            //     )
+            // ),
 
-            // Cara Kerja (How It Works)
-            React.createElement(
-                "div",
-                null,
-                React.createElement("h3", { className: "text-2xl font-bold text-gray-800 mb-6 text-center" }, "Cara Kerja"),
-                React.createElement(
-                    "div",
-                    { className: "grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" },
-                    [
-                        { icon: "camera", title: "1. Ambil Foto", desc: "Foto makanan lewat kamera atau upload gambar." },
-                        { icon: "cpu", title: "2. Deteksi Otomatis", desc: "YOLOv8 mengenali makanan & porsinya." },
-                        { icon: "search", title: "3. Analisis Nutrisi", desc: "Tampilkan kalori, karbohidrat, protein, lemak, dan gula." },
-                        { icon: "sparkles", title: "4. Dapatkan Rekomendasi oleh Gemini AI", desc: "Gemini AI memberikan saran makan sehat & edukasi gizi yang personal." }
-                    ].map(function(step, i) {
-                        return React.createElement(
-                            "div",
-                            { className: "flex items-start gap-3 bg-white p-4 rounded-lg shadow hover:shadow-lg transition-all", key: i },
-                            React.createElement(
-                                "div",
-                                { className: "w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 mr-2" },
-                                React.createElement("i", { "data-lucide": step.icon, className: "w-6 h-6 text-blue-600" })
-                            ),
-                            React.createElement(
-                                "div",
-                                null,
-                                React.createElement("div", { className: "font-semibold text-gray-800" }, step.title),
-                                React.createElement("div", { className: "text-gray-600 text-sm" }, step.desc)
-                            )
-                        );
-                    })
-                )
-            ),
+            // // Cara Kerja
+            // React.createElement(
+            //     "div",
+            //     null,
+            //     React.createElement("h3", { className: "text-2xl font-bold text-gray-800 mb-6 text-center" }, "Cara Kerja"),
+            //     React.createElement(
+            //         "div",
+            //         { className: "grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" },
+            //         [
+            //             { icon: "camera", title: "1. Ambil Foto", desc: "Foto makanan lewat kamera atau upload gambar." },
+            //             { icon: "cpu", title: "2. Deteksi Otomatis", desc: "YOLO mengenali makanan & porsinya." },
+            //             { icon: "search", title: "3. Analisis Nutrisi", desc: "Tampilkan kalori, karbohidrat, protein, lemak, dan gula." },
+            //             { icon: "sparkles", title: "4. Dapatkan Rekomendasi oleh Gemini AI", desc: "Gemini AI memberikan saran makan sehat & edukasi gizi yang personal." }
+            //         ].map(function (step, i) {
+            //             return React.createElement(
+            //                 "div",
+            //                 { className: "flex items-start gap-3 bg-white p-4 rounded-lg shadow hover:shadow-lg transition-all", key: i },
+            //                 React.createElement(
+            //                     "div",
+            //                     { className: "w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 mr-2" },
+            //                     React.createElement("i", { "data-lucide": step.icon, className: "w-6 h-6 text-blue-600" })
+            //                 ),
+            //                 React.createElement(
+            //                     "div",
+            //                     null,
+            //                     React.createElement("div", { className: "font-semibold text-gray-800" }, step.title),
+            //                     React.createElement("div", { className: "text-gray-600 text-sm" }, step.desc)
+            //                 )
+            //             );
+            //         })
+            //     )
+            // ),
 
             // Tombol Selengkapnya
             React.createElement(
