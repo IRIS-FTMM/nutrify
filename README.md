@@ -1,6 +1,3 @@
-Maaf atas kekeliruannya! Berikut adalah pembaruan untuk **README.md** yang sudah disesuaikan dengan **Nutrify**, bukan lagi **Calorie-Cam**.
-
-````markdown
 <h1 align="center"> Discover Your Food's Nutritional Secrets with Nutrify </h1>
 
 <p align="center">
