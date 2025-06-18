@@ -9,9 +9,9 @@ function StatsSection() {
                 { value: "50+", label: "Kelas Makanan", icon: "list" },
                 { value: "2.000+", label: "Gambar Dataset", icon: "image" },
                 { value: "2025", label: "Tahun Model", icon: "calendar" },
-                { value: "81.4%", label: "mAP@50 (Akurasi)", icon: "target" },
-                { value: "76.4%", label: "Precision", icon: "check" },
-                { value: "76.6%", label: "Recall", icon: "repeat" }
+                { value: "85.1%", label: "mAP@50 (Akurasi)", icon: "target" },
+                { value: "75.7%", label: "Precision", icon: "check" },
+                { value: "77.7%", label: "Recall", icon: "repeat" }
             ].map(function(s, i) {
                 return React.createElement("div", { key: i, className: "bg-white p-8 rounded-lg shadow fade-in" },
                     React.createElement("i", { "data-lucide": s.icon, className: "w-8 h-8 text-blue-600 mb-2" }),

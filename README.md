@@ -12,7 +12,7 @@ Cocok untuk aplikasi food recognition, edukasi gizi, serta tracking konsumsi har
   Anotasi bounding box rapi dan siap untuk training & evaluasi.
 * **Model:**
   Object Detection (Roboflow 3.0, Fast)
-  mAP\@50 **81.4%**, Precision **76.4%**, Recall **76.6%**
+  mAP\@50 **85.1%**, Precision **75.7%**, Recall **77.7%**
   Model siap di-deploy via API Roboflow atau inference lokal.
 
 > **Roboflow Universe:**
@@ -91,9 +91,9 @@ Akses aplikasi di browser: [http://localhost:8000](http://localhost:8000)
 
 * **Jumlah kelas:** 50+
 * **Gambar:** 777
-* **mAP\@50:** 81.4%
-* **Precision:** 76.4%
-* **Recall:** 76.6%
+* **mAP\@50:** 85.1%
+* **Precision:** 75.7%
+* **Recall:** 77.7%
 
 **Akurasi per Kelas (contoh):**
 

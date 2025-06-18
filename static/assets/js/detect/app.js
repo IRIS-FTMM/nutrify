@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isDetecting) return;
 
             setIsDetecting(true);
-            setCountdown(5);
+            setCountdown(3);
 
             countdownIntervalRef.current = setInterval(() => {
                 setCountdown(prev => prev > 1 ? prev - 1 : 0);
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const imageBlob = await captureFrame();
                 onAnalyze(imageBlob);
                 setIsDetecting(false);
-            }, 5000);
+            }, 3000);
         };
 
         const handleSwitchCamera = () => {

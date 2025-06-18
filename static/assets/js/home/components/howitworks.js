@@ -4,7 +4,7 @@ function HowItWorksSection() {
         { id: "how-it-works", className: "py-10 bg-gray-50" },
         React.createElement(
             "div",
-            { className: "container mx-auto px-6 max-w-6xl" }, // Perbesar max-width container
+            { className: "container mx-auto px-6 max-w-6xl" },
             React.createElement(
                 "div",
                 { className: "grid grid-cols-1 md:grid-cols-2 gap-12 items-center" }, // Grid 2 kolom
@@ -26,7 +26,7 @@ function HowItWorksSection() {
                 React.createElement(
                     "div",
                     null,
-                    React.createElement("h3", { className: "text-2xl font-bold text-gray-800 mb-6" }, "Cara Kerja"),
+                    React.createElement("h3", { className: "text-3xl font-bold text-gray-800 mb-6" }, "Cara Kerja"),  // Adjusted size
                     React.createElement(
                         "div",
                         { className: "grid grid-cols-1 gap-6" },
@@ -41,7 +41,7 @@ function HowItWorksSection() {
                                 { 
                                     className: "flex items-start gap-3 bg-white p-4 rounded-lg shadow hover:shadow-lg transition-all fade-in",
                                     key: i,
-                                    style: { animationDelay: `${i * 100}ms` } // Animasi berurutan
+                                    style: { animationDelay: `${i * 100}ms` }
                                 },
                                 React.createElement(
                                     "div",

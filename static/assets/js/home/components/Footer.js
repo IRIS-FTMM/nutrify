@@ -18,7 +18,7 @@ function Footer() {
             React.createElement(
                 "div",
                 { className: "flex space-x-4 justify-center mb-6" },
-                React.createElement("a", { href: "https://github.com/arknsa/calorie-cam", target: "_blank", rel: "noopener" },
+                React.createElement("a", { href: "https://github.com/arknsa/nutrify", target: "_blank", rel: "noopener" },
                     React.createElement("i", { "data-lucide": "github", className: "w-6 h-6 text-gray-400 hover:text-blue-400" })
                 )
             ),

@@ -6,7 +6,7 @@ function FoodsListTeaser() {
             "div",
             { className: "container mx-auto px-6 text-center max-w-2xl" },
             // Judul
-            React.createElement("h2", { className: "text-3xl font-bold text-gray-800 mb-2" }, "Daftar Makanan"),
+            React.createElement("h2", { className: "text-3xl font-bold text-gray-800 mb-2" }, "Daftar Makanan"),  // Adjusted size to match
             // Deskripsi
             React.createElement("p", { className: "text-gray-600 mb-6" },
                 "Jelajahi lebih dari 50 jenis makanan dan minuman khas Indonesia yang dapat dikenali secara otomatis berikut informasi gizi dan kalorinya."
