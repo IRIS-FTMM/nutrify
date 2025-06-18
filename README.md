@@ -33,6 +33,11 @@
 
 ## 🛠️ Instalasi
 
+Tampaknya kamu ingin membuat format nomor yang konsisten dalam daftar yang kamu buat pada file markdown (seperti yang ada di dalam gambar). Untuk membuatnya konsisten, kamu bisa mengubahnya dengan cara menambahkan baris kosong atau pemisah antara setiap langkah.
+
+Berikut adalah contoh format yang bisa digunakan agar setiap langkah memiliki jarak seperti nomor 1:
+
+````markdown
 1. **Clone repository:**
    ```bash
    git clone https://github.com/arknsa/nutrify.git
