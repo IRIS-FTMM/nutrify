@@ -6,10 +6,11 @@ from fatsecret import Fatsecret
 load_dotenv()
 consumer_key = os.getenv("FATSECRET_CONSUMER_KEY")
 consumer_secret = os.getenv("FATSECRET_CONSUMER_SECRET")
+
 fs = Fatsecret(consumer_key, consumer_secret)
 
 def parse_nutrition(description: str):
-    # Buat dictionary kosong
+    # Membuat dictionary untuk menyimpan informasi nutrisi
     nutrition = {
         "calories": "-",
         "fat": "-",
@@ -17,11 +18,11 @@ def parse_nutrition(description: str):
         "protein": "-"
     }
 
-    # Cek untuk setiap elemen nutrisi
-    cal_match = re.search(r'Calories:\s*([\d.]+)kcal', description)
-    fat_match = re.search(r'Fat:\s*([\d.]+)g', description)
-    carbs_match = re.search(r'Carbs:\s*([\d.]+)g', description)
-    protein_match = re.search(r'Protein:\s*([\d.]+)g', description)
+    # Mencari informasi nutrisi dalam deskripsi menggunakan regex
+    cal_match = re.search(r'Kalori:\s*([\d.]+)kkal', description)
+    fat_match = re.search(r'Lemak:\s*([\d.]+)g', description)
+    carbs_match = re.search(r'Karb:\s*([\d.]+)g', description)
+    protein_match = re.search(r'Prot:\s*([\d.]+)g', description)
 
     if cal_match:
         nutrition["calories"] = float(cal_match.group(1))
@@ -36,8 +37,10 @@ def parse_nutrition(description: str):
 
 def search_calorie(food_name: str):
     try:
+        # Mencari makanan di API Fatsecret
         foods = fs.foods_search(food_name)
         print(f"FatSecret API response: {foods}")  # Log respons dari API
+
         if isinstance(foods, list):
             foods_data = foods
         elif isinstance(foods, dict):
@@ -52,7 +55,7 @@ def search_calorie(food_name: str):
         else:
             return None
 
-        # Cari food item dengan deskripsi serving 100 g
+        # Menyaring hasil untuk mencari informasi dengan deskripsi "100 g"
         for food in foods_data:
             desc = food.get('food_description', '')
             if "100 g" in desc:
@@ -63,7 +66,7 @@ def search_calorie(food_name: str):
                 nutrition["food_url"] = food.get('food_url', '')
                 return nutrition
 
-        # Jika tidak ada yang "100 g", fallback ke yang pertama
+        # Jika tidak ditemukan yang "100 g", menggunakan hasil pertama
         food = foods_data[0]
         desc = food.get('food_description', 'No calorie info')
         serving = food.get('serving_description', 'Per serving')

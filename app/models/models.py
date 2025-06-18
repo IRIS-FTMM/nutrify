@@ -1,120 +1,118 @@
-import gdown
-import os
 from inference_sdk import InferenceHTTPClient
-from ultralytics import YOLO
+import os
+from PIL import Image
+import cv2
+import numpy as np
+from io import BytesIO
 from typing import List, Dict
 
-# Path where models will be saved
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Function to download models from Google Drive
-def download_model(model_id: str, model_filename: str):
-    url = f"https://drive.google.com/uc?export=download&id={model_id}"
-    output_path = os.path.join(BASE_DIR, model_filename)
-    gdown.download(url, output_path, quiet=False)
-    return output_path
-
-# Initialize Roboflow client
-roboflow_client = InferenceHTTPClient(
+# Initialize the Roboflow client globally (outside any function)
+client = InferenceHTTPClient(
     api_url="https://serverless.roboflow.com",
-    api_key=os.getenv("ROBOFLOW_MODEL_API_KEY")  # Ensure this is set correctly
+    api_key="W5MsQQZpv9FnaiGX3hG7"  # Replace with your actual API key
 )
 
-# Model file IDs from Google Drive
-model_id_v8s_pretrained = "1Lg2rokWI6975zidBiI262IHs-PN4NQ2s"  # yolov8s pretrained model ID
-model_filename_v8s_pretrained = "yolov8s-pretrained.pt"
-
-model_id_v8s_finetuned = "1X5wVhkpQE6kz0h97tV20sM9hyK7Kw5kF"  # yolov8s fine-tuned model ID
-model_filename_v8s_finetuned = "yolov8s-finetuned.pt"
-
-# Download models if they don't exist already
-if not os.path.exists(os.path.join(BASE_DIR, model_filename_v8s_pretrained)):
-    download_model(model_id_v8s_pretrained, model_filename_v8s_pretrained)
-
-if not os.path.exists(os.path.join(BASE_DIR, model_filename_v8s_finetuned)):
-    download_model(model_id_v8s_finetuned, model_filename_v8s_finetuned)
-
-# Load YOLO models using the downloaded files
-yolo_model_v8s_pretrained = YOLO(os.path.join(BASE_DIR, model_filename_v8s_pretrained))
-yolo_model_v8s_finetuned = YOLO(os.path.join(BASE_DIR, model_filename_v8s_finetuned))
-
-# List of classes to exclude (Vietnamese food categories)
-excluded_classes = [
-    "Banh_mi", "Banh_trang_tron", "Banh_xeo", "Bun_bo_Hue", "Bun_dau", "Com_tam",
-    "Goi_cuon", "Pho", "Hu_tieu", "Xoi"
-]
-
-def filter_detections(detections):
-    # Filter detections to exclude unwanted classes
-    return [d for d in detections if d["label"] not in excluded_classes]
-
-
-def detect_food_labels(image_path: str) -> List[Dict]:
+def detect_food_labels_from_image(image_path: str, confidence_threshold: float = 0.65) -> List[Dict]:
     detections = []
-    model_used = "None"
-
-    # Step 1: Try detection using Roboflow
-    roboflow_result = roboflow_client.run_workflow(
+    
+    # Run detection on the uploaded image using Roboflow
+    result = client.run_workflow(
         workspace_name="machinelearning-4tyun",
-        workflow_id="detect-and-classify",
+        workflow_id="detect-and-classify-4",
         images={"image": image_path},
         use_cache=True
     )
 
-    # Deteksi makanan menggunakan Roboflow
-    for item in roboflow_result:
+    # Process each prediction from the result
+    for item in result:
         predictions = item.get('detection_predictions', {}).get('predictions', [])
         
         for prediction in predictions:
-            label = prediction['class']
-            confidence = prediction['confidence']
+            label = prediction['class']  # This will be the label predicted by the model
+            confidence = prediction['confidence']  # Confidence of the prediction
             
-            if confidence >= 0.50:
+            # If the confidence is above the threshold, we add the detection
+            if confidence >= confidence_threshold:
                 detections.append({
                     "label": label,
                     "confidence": confidence,
-                    "model": "Roboflow",  # Menambahkan informasi model yang digunakan
+                    "bounding_box": {
+                        "x": prediction['x'],
+                        "y": prediction['y'],
+                        "width": prediction['width'],
+                        "height": prediction['height']
+                    }
                 })
-
-    # Step 2: If Roboflow fails, try YOLOv8s pretrained model
-    if not detections:
-        print("Roboflow did not detect any objects with sufficient confidence. Using YOLOv8s pretrained as fallback.")
-        model_used = "YOLOv8s Pretrained"
-        
-        # Deteksi menggunakan YOLOv8s pretrained model
-        yolo_results = yolo_model_v8s_pretrained(image_path)
-        
-        for result in yolo_results:
-            for box in result.boxes:
-                cls_id = int(box.cls[0].item())
-                label = yolo_model_v8s_pretrained.names[cls_id]
-                confidence = float(box.conf[0].item())
-                detections.append({
-                    "label": label,
-                    "confidence": confidence,
-                    "model": "YOLOv8s Pretrained",  # Menambahkan informasi model yang digunakan
-                })
-
-    # Step 3: If YOLOv8s pretrained fails, try the fine-tuned YOLOv8s model
-    if not detections:
-        print("YOLOv8s Pretrained did not detect any objects with sufficient confidence. Using YOLOv8s Fine-tuned as fallback.")
-        model_used = "YOLOv8s Fine-tuned"
-        
-        # Deteksi menggunakan YOLOv8s fine-tuned model
-        yolo_results_finetuned = yolo_model_v8s_finetuned(image_path)
-        
-        for result in yolo_results_finetuned:
-            for box in result.boxes:
-                cls_id = int(box.cls[0].item())
-                label = yolo_model_v8s_finetuned.names[cls_id]
-                confidence = float(box.conf[0].item())
-                detections.append({
-                    "label": label,
-                    "confidence": confidence,
-                    "model": "YOLOv8s Fine-tuned",  # Menambahkan informasi model yang digunakan
-                })
-
-    # Apply filter to remove unwanted detections
-    detections = filter_detections(detections)
 
     return detections
+
+
+def draw_bounding_boxes(image_path: str, detections: List[Dict]) -> np.ndarray:
+    # Load the image using OpenCV
+    image = cv2.imread(image_path)
+
+    # Annotate the image with bounding boxes and labels
+    for detection in detections:
+        if 'bounding_box' in detection:
+            # Extract and convert the bounding box coordinates to integers
+            x, y, w, h = map(int, [detection['bounding_box']['x'], 
+                                    detection['bounding_box']['y'], 
+                                    detection['bounding_box']['width'], 
+                                    detection['bounding_box']['height']])
+
+            # Draw green bounding box
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)  # Green color for bounding box
+
+            # Draw the label and confidence percentage above the bounding box
+            cv2.putText(image, f"{detection['label']} {detection['confidence'] * 100:.2f}%", 
+                        (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)  # Green color for text
+
+    return image
+
+
+
+
+# Handle video streaming from webcam and run detection
+def detect_food_labels_from_video(video_source=0, confidence_threshold: float = 0.65):
+    # Start capturing video from the webcam
+    cap = cv2.VideoCapture(video_source)
+    
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        
+        # Save the current frame temporarily as an image
+        ret, jpeg = cv2.imencode('.jpg', frame)
+        image_bytes = jpeg.tobytes()
+        pil_image = Image.open(BytesIO(image_bytes))
+        image_path = 'temp_frame.jpg'
+        pil_image.save(image_path)
+
+        # Run food detection on the current frame
+        detections = detect_food_labels_from_image(image_path, confidence_threshold)
+        
+        # Annotate the frame with detected bounding boxes and labels
+        for detection in detections:
+            label = detection['label']
+            confidence = detection['confidence']
+            
+            # Draw the bounding box around the detected object
+            cv2.rectangle(frame, (int(detection['x']), int(detection['y'])),
+                          (int(detection['x'] + detection['width']), int(detection['y'] + detection['height'])),
+                          (0, 255, 0), 2)  # Green color for the bounding box
+
+            # Display the label and confidence near the bounding box
+            label_text = f"{label} ({confidence * 100:.1f}%)"
+            cv2.putText(frame, label_text, 
+                        (int(detection['x']), int(detection['y'] - 10)),  # Position the text just above the bounding box
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)  # White color with thickness of 2
+
+        # Display the frame with annotations
+        cv2.imshow("Food Detection", frame)
+        
+        if cv2.waitKey(1) & 0xFF == ord('q'):  # Press 'q' to quit
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()

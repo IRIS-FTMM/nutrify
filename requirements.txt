@@ -5,7 +5,6 @@ pillow
 jinja2
 python-dotenv
 fatsecret
-rauth
 ultralytics
 python-multipart
 requests
