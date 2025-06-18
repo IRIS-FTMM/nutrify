@@ -37,12 +37,11 @@ Tampaknya kamu ingin membuat format nomor yang konsisten dalam daftar yang kamu 
 
 Berikut adalah contoh format yang bisa digunakan agar setiap langkah memiliki jarak seperti nomor 1:
 
-````markdown
 1. **Clone repository:**
-   ```bash
+  ```bash
    git clone https://github.com/arknsa/nutrify.git
    cd nutrify
-````
+  ```
 
 2. **Buat virtual environment (opsional):**
 
@@ -56,8 +55,7 @@ Berikut adalah contoh format yang bisa digunakan agar setiap langkah memiliki ja
    ```bash
    pip install -r requirements.txt
    ```
-
-4. **Download dan letakkan model YOLOv8s di `app/models/`**
+4. **Minta API Key ke @arknsa_**
 
 ---
 
@@ -128,13 +126,6 @@ Terdapat 3 versi implementasi:
   * [Detection](https://drive.google.com/file/d/1SywGfyfj3SVrE7VAAl3CshB9s3o8WRXL/view?usp=sharing)
   * [Classification](https://colab.research.google.com/drive/11VzRR8NmJyZGJ-3obkuV0zZAlYAPhCY1?usp=sharing)
   * [Semantic segmentation](https://colab.research.google.com/drive/16xe6WL5mAAmpm-ab0xo1LONV3tAtI-4O?usp=sharing)
-
----
-
-## 🥇 Pretrained-weights
-
-* [YOLOv8s.pt (Google Drive)](https://drive.google.com/drive/folders/1o_YBf35rMEGAwW9R-FhN_ZuG0BQBSBBA?usp=sharing)
-* [Kumpulan model lain (Google Drive)](https://drive.google.com/drive/folders/15PlXWkFheuBxJOYkwm9iS_aZCcr8L0A7?usp=sharing)
 
 ---
 
