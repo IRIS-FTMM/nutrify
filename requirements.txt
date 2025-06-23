@@ -1,15 +1,11 @@
 fastapi
-fatsecret
-gdown
 inference_sdk
 uvicorn
 jinja2
 opencv-python
 openrouter
 pandas
-pillow
 python-dotenv
 python-multipart
 rauth
 requests
-ultralytics
