@@ -10,7 +10,6 @@ from typing import List
 # Pastikan path import ini sesuai dengan struktur folder Anda
 # Jika models.py ada di folder app/models/, maka path ini sudah benar
 from app.models.models import detect_food_labels_from_image, draw_bounding_boxes
-from app.utils.fatsecret_clients import search_calorie # Kita tetap import
 
 router = APIRouter(prefix="/detect", tags=["detection"])
 

@@ -7,7 +7,6 @@ import shutil
 import os
 import cv2
 import base64
-import numpy as np
 from pathlib import Path # Import pathlib
 
 # Pastikan path import ini sesuai dengan struktur folder Anda
@@ -187,3 +186,4 @@ async def generate_calorie_tips(req: CalorieRequest):
     cleaned_tips = [clean_markdown(t) for t in raw_tips]
     
     return {"tips": cleaned_tips}
+
