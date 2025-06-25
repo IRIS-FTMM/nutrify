@@ -49,7 +49,7 @@ function AboutSection() {
                 React.createElement(
                     "div",
                     { className: "text-center" },
-                    React.createElement("div", { className: "text-3xl font-bold text-blue-600 mb-2" }, "YOLO"),
+                    React.createElement("div", { className: "text-3xl font-bold text-blue-600 mb-2" }, "YOLOv12"),
                     React.createElement("div", { className: "text-gray-600" }, "Model Deteksi Makanan")
                 ),
                 React.createElement(
