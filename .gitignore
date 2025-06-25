@@ -30,5 +30,3 @@ venv/
 # Environment variables
 .env
 .vercel
-
-DockerFile
