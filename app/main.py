@@ -46,7 +46,8 @@ async def startup_event():
     Fungsi ini akan dijalankan satu kali saat server FastAPI dimulai.
     """
     print("Server sedang memulai, memuat database makanan...")
-    load_food_database()  # Panggil fungsi untuk memuat data ke memori
+    # load_food_database()  
+    # Panggil fungsi untuk memuat data ke memori
     print("Database makanan berhasil dimuat ke dalam cache.")
 
 
