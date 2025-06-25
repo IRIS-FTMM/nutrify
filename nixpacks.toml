@@ -1,3 +1,5 @@
-# nixpacks.toml
+# nixpacks.toml (Versi Perbaikan)
+
 [phases.setup]
-nixPkgs = ["pkgs.libgl", "pkgs.glib"]
+# Menggunakan nama paket sistem yang benar untuk dependensi OpenCV
+nixPkgs = ["pkgs.glib", "pkgs.mesa"]
