@@ -1,5 +1,10 @@
-# nixpacks.toml (Versi Final v2)
+# nixpacks.toml (Versi Paling Lengkap)
 
 [phases.setup]
-# Menambahkan pkgs.libGL secara spesifik untuk kebutuhan OpenCV
-nixPkgs = ["pkgs.python310", "pkgs.glib", "pkgs.mesa", "pkgs.libGL"]
+nixPkgs = [
+  "pkgs.python310", 
+  "pkgs.glib", 
+  "pkgs.mesa", 
+  "pkgs.libGL",
+  "pkgs.xorg.libX11"
+]
