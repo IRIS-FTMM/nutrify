@@ -1,5 +1,6 @@
-# nixpacks.toml (Versi Perbaikan)
+# nixpacks.toml (Versi Final)
 
 [phases.setup]
-# Menggunakan nama paket sistem yang benar untuk dependensi OpenCV
-nixPkgs = ["pkgs.glib", "pkgs.mesa"]
+# Menambahkan Python 3.10 secara eksplisit ke lingkungan build,
+# bersama dengan dependensi sistem lainnya.
+nixPkgs = ["pkgs.python310", "pkgs.glib", "pkgs.mesa"]
